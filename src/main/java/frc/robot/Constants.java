@@ -35,7 +35,8 @@ public final class Constants {
 
     public static final double TOLERANCE = 0.0;
 
-    public static final double MAXSPEED = 0.2;
+    public static final double INTAKEMAXSPEED = 0.0;
+    public static final double PIVOTMAXSPEED = 0.2;
   }
 
   public static class ElevatorConstants{

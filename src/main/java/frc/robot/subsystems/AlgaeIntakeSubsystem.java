@@ -86,11 +86,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     if(PIDOn){
       output = pivotPID.calculate(getEncoder(), setpoint);
 
-      if(output > AlgaeIntakeConstants.MAXSPEED){
-        output = AlgaeIntakeConstants.MAXSPEED;
+      if(output > AlgaeIntakeConstants.INTAKEMAXSPEED){
+        output = AlgaeIntakeConstants.INTAKEMAXSPEED;
       }
-      else if(output < -AlgaeIntakeConstants.MAXSPEED){
-        output = -AlgaeIntakeConstants.MAXSPEED;
+      else if(output < -AlgaeIntakeConstants.INTAKEMAXSPEED){
+        output = -AlgaeIntakeConstants.INTAKEMAXSPEED;
       }
       
       if(isDone() || getLMValue()){
