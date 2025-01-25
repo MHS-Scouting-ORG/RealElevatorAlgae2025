@@ -4,11 +4,22 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
-  public ElevatorSubsystem() {}
+  private TalonFX elevatorMotor;
+  private DigitalInput topLimitSwitch;
+  private DigitalInput bottomLimitSwitch;
+
+  public ElevatorSubsystem() {
+    elevatorMotor = new TalonFX(0);
+    topLimitSwitch = new DigitalInput(0);
+    bottomLimitSwitch = new DigitalInput(0);
+  }
 
   @Override
   public void periodic() {

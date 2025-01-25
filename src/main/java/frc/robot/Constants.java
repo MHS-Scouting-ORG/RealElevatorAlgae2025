@@ -16,4 +16,44 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  //LS = Limit Switch
+
+  public static class AlgaeIntakeConstants{
+    //Motor ID's
+    public static final int INTAKEID = 0;
+    public static final int PIVOTID = 0;
+
+    //Sensor ID's
+    public static final int OPTICALID = 0;
+    public static final int LMID = 0;
+
+    //PID Constants and Other Important Variables
+    public static final double KP = 0.0;
+    public static final double KI = 0.0;
+    public static final double KD = 0.0;
+
+    public static final double TOLERANCE = 0.0;
+
+    public static final double MAXSPEED = 0.0;
+  }
+
+  public static class ElevatorConstants{
+    //Motor ID's
+    public static final int LIFTID = 0;
+
+    //Sensor ID's
+    public static final int UPPERLSID = 0;
+    public static final int BOTTOMLSID = 0;
+
+    //PID Constants and Other Important Variables
+    public static final double KP = 0.0;
+    public static final double KI = 0.0;
+    public static final double KD = 0.0;
+
+    public static final double TOLERANCE = 0.0; 
+
+    public static final double MAXSPEED = 0.0;
+  }
 }
+
