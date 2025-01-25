@@ -4,10 +4,16 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
   /** Creates a new AlgaeIntake. */
@@ -15,16 +21,90 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private TalonSRX algaePivot;
   private DigitalInput opticalSensor;
   private DigitalInput limitSwitch;
+  private PIDController pivotPID;
+
+  private boolean PIDOn = false;
+  private double setpoint = 0.0;
 
   public AlgaeIntakeSubsystem() {
-    algaeIntake = new TalonSRX(0);
-    algaePivot = new TalonSRX(0);
-    opticalSensor = new DigitalInput(0);
-    limitSwitch = new DigitalInput(0);
+    algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);
+    algaePivot = new TalonSRX(AlgaeIntakeConstants.PIVOTID);
+    algaePivot.setNeutralMode(NeutralMode.Brake);
+    opticalSensor = new DigitalInput(AlgaeIntakeConstants.OPTICALID);
+    limitSwitch = new DigitalInput(AlgaeIntakeConstants.LSID);
+    pivotPID = new PIDController(AlgaeIntakeConstants.KP, AlgaeIntakeConstants.KI, AlgaeIntakeConstants.KD);
+    pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
+  }
+
+  public double getEncoder(){
+    return -algaeIntake.getSelectedSensorPosition() / 1000;
+  }
+
+  public boolean getOpticalValue(){
+    return opticalSensor.get();
+  }
+
+  public boolean getLMValue(){
+    return limitSwitch.get();
+  }
+
+  public void runIntakeMotor(double speed){
+    algaeIntake.set(TalonSRXControlMode.PercentOutput, speed);
+    if(getOpticalValue()){
+      stopIntakeMotor();
+    }
+  }
+
+  public void stopIntakeMotor(){
+    algaeIntake.set(TalonSRXControlMode.PercentOutput, 0);
+  }
+
+  public void stopPivotMotor(){
+    algaePivot.set(TalonSRXControlMode.PercentOutput, 0);
+  }
+
+  public void enablePID(){
+    PIDOn = true;
+  }
+
+  public void disablePID(){
+    PIDOn = false;
+  }
+
+  public boolean isDone(){
+    return pivotPID.atSetpoint();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double output = 0.0;
+
+    SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
+    SmartDashboard.putBoolean("[A] isFinished?", isDone());
+
+    if(PIDOn){
+      output = pivotPID.calculate(getEncoder(), setpoint);
+
+      if(output > AlgaeIntakeConstants.MAXSPEED){
+        output = AlgaeIntakeConstants.MAXSPEED;
+      }
+      else if(output < -AlgaeIntakeConstants.MAXSPEED){
+        output = -AlgaeIntakeConstants.MAXSPEED;
+      }
+      
+      if(isDone() || getLMValue()){
+        disablePID();
+        stopIntakeMotor();
+      }
+      else{
+        algaePivot.set(TalonSRXControlMode.Current, output);
+      }
+    }
+    
+    SmartDashboard.putNumber("[A] Pivot PID Output:", output);
+    SmartDashboard.putBoolean("[A] Optical Sensor:", getOpticalValue());
+    SmartDashboard.putBoolean("[A] Limit Switch:", getLMValue());
+
   }
 }
