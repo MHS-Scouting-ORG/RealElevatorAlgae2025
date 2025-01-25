@@ -26,7 +26,7 @@ public final class Constants {
 
     //Sensor ID's
     public static final int OPTICALID = 0;
-    public static final int LMID = 0;
+    public static final int LSID = 0;
 
     //PID Constants and Other Important Variables
     public static final double KP = 0.0;
@@ -35,7 +35,7 @@ public final class Constants {
 
     public static final double TOLERANCE = 0.0;
 
-    public static final double MAXSPEED = 0.0;
+    public static final double MAXSPEED = 0.2;
   }
 
   public static class ElevatorConstants{
