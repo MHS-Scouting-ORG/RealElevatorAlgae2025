@@ -6,9 +6,12 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorCmds.ManualElevatorCmd;
+import frc.robot.commands.ElevatorCmds.TestPIDCmd;
+import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,12 +21,20 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  public final XboxController xbox = new XboxController(OperatorConstants.kDriverControllerPort);
+
+  public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
   public RobotContainer() {
+
+    elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
 
     configureBindings();
   }
 
   private void configureBindings() {
+    
+    new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TestPIDCmd(elevatorSubsystem, 100));
 
   }
 

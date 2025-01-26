@@ -76,7 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void NewSetpoint(double newSetpoint) {
+  public void setSetpoint(double newSetpoint) {
     setpoint = newSetpoint;
   }
 
