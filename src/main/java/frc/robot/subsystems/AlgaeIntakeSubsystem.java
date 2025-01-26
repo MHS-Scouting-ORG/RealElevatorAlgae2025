@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,10 +16,8 @@ import frc.robot.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
   /** Creates a new AlgaeIntake. */
-  private TalonSRX algaeIntake;
-  private TalonSRX algaePivot;
-  private DigitalInput opticalSensor;
-  private DigitalInput limitSwitch;
+  private TalonSRX algaeIntake, algaePivot;
+  private DigitalInput opticalSensor, limitSwitch;
   private PIDController pivotPID;
 
   private boolean PIDOn = false;
@@ -50,9 +47,27 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   public void runIntakeMotor(double speed){
     algaeIntake.set(TalonSRXControlMode.PercentOutput, speed);
-    if(getOpticalValue()){
-      stopIntakeMotor();
+  }
+
+  double deadzone(double speed){
+    if(speed < 0.1 && speed > -0.1){
+      return 0;
     }
+    else{
+      if(speed > AlgaeIntakeConstants.PIVOTMAXSPEED){
+        return AlgaeIntakeConstants.PIVOTMAXSPEED;
+      }
+      else if (speed < -AlgaeIntakeConstants.PIVOTMAXSPEED){
+        return -AlgaeIntakeConstants.PIVOTMAXSPEED;
+      }
+      else{
+        return speed;
+      }
+    }
+  }
+
+  public void runPivotMotor(double speed){
+    algaePivot.set(TalonSRXControlMode.PercentOutput, deadzone(speed));
   }
 
   public void stopIntakeMotor(){
@@ -75,6 +90,10 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     return pivotPID.atSetpoint();
   }
 
+  public void setSetpoint(double newSetpoint){
+    setpoint = newSetpoint;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -82,7 +101,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
-
+    
     if(PIDOn){
       output = pivotPID.calculate(getEncoder(), setpoint);
 

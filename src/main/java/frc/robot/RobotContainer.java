@@ -6,8 +6,12 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.AlgaeIntakeCmds.ManualPivotCmd;
 import frc.robot.commands.ElevatorCmds.ManualElevatorCmd;
 import frc.robot.commands.ElevatorCmds.TestPIDCmd;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.commands.AlgaeIntakeCmds.ManualPivotCmd;
+import frc.robot.commands.AlgaeIntakeCmds.StoragePositionCmd;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,10 +28,12 @@ public class RobotContainer {
   public final XboxController xbox = new XboxController(OperatorConstants.kDriverControllerPort);
 
   public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  public final AlgaeIntakeSubsystem algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
 
   public RobotContainer() {
 
     elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
+    algaeIntakeSubsystem.setDefaultCommand(new ManualPivotCmd(algaeIntakeSubsystem, () -> xbox.getRightY()));
 
     configureBindings();
   }
@@ -35,6 +41,7 @@ public class RobotContainer {
   private void configureBindings() {
     
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TestPIDCmd(elevatorSubsystem, 100));
+    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaeIntakeSubsystem));
 
   }
 
