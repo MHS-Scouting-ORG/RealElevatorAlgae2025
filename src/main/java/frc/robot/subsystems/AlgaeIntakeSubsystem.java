@@ -21,6 +21,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private PIDController pivotPID;
 
   private boolean PIDOn = false;
+  private double output = 0.0;
   private double setpoint = 0.0;
 
   public AlgaeIntakeSubsystem() {
@@ -34,7 +35,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   }
 
   public double getEncoder(){
-    return -algaeIntake.getSelectedSensorPosition() / 1000;
+    return algaePivot.getSelectedSensorPosition() / 1000;
   }
 
   public boolean getOpticalValue(){
@@ -97,7 +98,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double output = 0.0;
 
     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
@@ -105,22 +105,23 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     if(PIDOn){
       output = pivotPID.calculate(getEncoder(), setpoint);
 
-      if(output > AlgaeIntakeConstants.INTAKEMAXSPEED){
-        output = AlgaeIntakeConstants.INTAKEMAXSPEED;
+      if(output > AlgaeIntakeConstants.PIVOTMAXSPEED){
+        output = AlgaeIntakeConstants.PIVOTMAXSPEED;
       }
-      else if(output < -AlgaeIntakeConstants.INTAKEMAXSPEED){
-        output = -AlgaeIntakeConstants.INTAKEMAXSPEED;
+      else if(output < -AlgaeIntakeConstants.PIVOTMAXSPEED){
+        output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
       }
       
-      if(isDone() || getLMValue()){
+      // || getLMValue()
+      if(isDone()){
         disablePID();
-        stopIntakeMotor();
+        stopPivotMotor();
       }
       else{
         algaePivot.set(TalonSRXControlMode.Current, output);
       }
     }
-    
+
     SmartDashboard.putNumber("[A] Pivot PID Output:", output);
     SmartDashboard.putBoolean("[A] Optical Sensor:", getOpticalValue());
     SmartDashboard.putBoolean("[A] Limit Switch:", getLMValue());

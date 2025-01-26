@@ -41,7 +41,7 @@ public class RobotContainer {
   private void configureBindings() {
     
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TestPIDCmd(elevatorSubsystem, 100));
-    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaeIntakeSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kB.value).toggleOnTrue(new StoragePositionCmd(algaeIntakeSubsystem));
 
   }
 
