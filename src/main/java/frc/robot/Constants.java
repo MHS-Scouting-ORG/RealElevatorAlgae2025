@@ -25,8 +25,8 @@ public final class Constants {
     public static final int PIVOTID = 12;
 
     //Sensor ID's
-    public static final int OPTICALID = 1;
-    public static final int LSID = 0;
+    public static final int OPTICALID = 0;
+    public static final int LSID = 1;
 
     //PID Constants and Other Important Variables
     public static final double KP = 0.01;

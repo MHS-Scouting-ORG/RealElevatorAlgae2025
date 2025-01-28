@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -20,6 +22,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private DigitalInput opticalSensor, limitSwitch;
   private PIDController pivotPID;
 
+  private double speed;
+
   private boolean PIDOn = false;
   private double output = 0.0;
   private double setpoint = 0.0;
@@ -34,64 +38,59 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
   }
 
-  public double getEncoder(){
+  public double getEncoder() {
     return algaePivot.getSelectedSensorPosition() / 1000;
   }
 
-  public boolean getOpticalValue(){
+  public boolean getOpticalValue() {
     return opticalSensor.get();
   }
 
-  public boolean getLMValue(){
+  public boolean getLSValue() {
     return limitSwitch.get();
   }
 
-  public void runIntakeMotor(double speed){
+  void deadzone() {
+    if (speed < 0.1 && speed > -0.1) {
+      speed = 0.0;
+    } else {
+      if (speed > AlgaeIntakeConstants.PIVOTMAXSPEED) {
+        speed = AlgaeIntakeConstants.PIVOTMAXSPEED;
+      } else if (speed < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
+        speed = -AlgaeIntakeConstants.PIVOTMAXSPEED;
+      }
+    }
+  }
+
+  public void runIntakeMotor(double speed) {
     algaeIntake.set(TalonSRXControlMode.PercentOutput, speed);
   }
 
-  double deadzone(double speed){
-    if(speed < 0.1 && speed > -0.1){
-      return 0;
-    }
-    else{
-      if(speed > AlgaeIntakeConstants.PIVOTMAXSPEED){
-        return AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
-      else if (speed < -AlgaeIntakeConstants.PIVOTMAXSPEED){
-        return -AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
-      else{
-        return speed;
-      }
-    }
+  public void setDesiredPivotSpeed(double speed) {
+    this.speed = speed;
   }
 
-  public void runPivotMotor(double speed){
-    algaePivot.set(TalonSRXControlMode.PercentOutput, deadzone(speed));
-  }
-
-  public void stopIntakeMotor(){
+  public void stopIntakeMotor() {
     algaeIntake.set(TalonSRXControlMode.PercentOutput, 0);
   }
 
-  public void stopPivotMotor(){
+  public void stopPivotMotor() {
     algaePivot.set(TalonSRXControlMode.PercentOutput, 0);
   }
 
-  public void enablePID(){
+  public void enablePID() {
     PIDOn = true;
   }
 
-  public void disablePID(){
+  public void disablePID() {
     PIDOn = false;
   }
 
-  public boolean isDone(){
+  public boolean isDone() {
     return pivotPID.atSetpoint();
   }
 
-  public void setSetpoint(double newSetpoint){
+  public void setSetpoint(double newSetpoint) {
     setpoint = newSetpoint;
   }
 
@@ -101,30 +100,35 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
-    
-    if(PIDOn){
+
+    if (PIDOn) {
       output = pivotPID.calculate(getEncoder(), setpoint);
 
-      if(output > AlgaeIntakeConstants.PIVOTMAXSPEED){
+      if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
         output = AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
-      else if(output < -AlgaeIntakeConstants.PIVOTMAXSPEED){
+      } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
         output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
       }
-      
+
       // || getLMValue()
-      if(isDone()){
+      if (isDone()) {
         disablePID();
         stopPivotMotor();
-      }
-      else{
+      } else {
         algaePivot.set(TalonSRXControlMode.Current, output);
+      }
+    } else {
+      if (getLSValue() && speed > 0) {
+        stopPivotMotor();
+      } else {
+        deadzone();
+        algaePivot.set(TalonSRXControlMode.PercentOutput, speed);
       }
     }
 
     SmartDashboard.putNumber("[A] Pivot PID Output:", output);
     SmartDashboard.putBoolean("[A] Optical Sensor:", getOpticalValue());
-    SmartDashboard.putBoolean("[A] Limit Switch:", getLMValue());
+    SmartDashboard.putBoolean("[A] Limit Switch:", getLSValue());
 
   }
 }
