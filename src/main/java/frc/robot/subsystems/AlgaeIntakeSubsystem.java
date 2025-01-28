@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -15,10 +11,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
-  /** Creates a new AlgaeIntake. */
   private TalonSRX algaeIntake, algaePivot;
   private DigitalInput opticalSensor, limitSwitch;
   private PIDController pivotPID;
+
+  private double speed;
 
   private boolean PIDOn = false;
   private double output = 0.0;
@@ -34,97 +31,106 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
   }
 
-  public double getEncoder(){
+  //returns the integrated encoder value of the algae pivot motor 
+  public double getEncoder() {
     return algaePivot.getSelectedSensorPosition() / 1000;
   }
 
-  public boolean getOpticalValue(){
+  //returns the value of the optical sensor (true or false)
+  public boolean getOpticalValue() {
     return opticalSensor.get();
   }
 
-  public boolean getLMValue(){
+  //returns the value of the limit switch (true or false)
+  public boolean getLSValue() {
     return limitSwitch.get();
   }
 
-  public void runIntakeMotor(double speed){
+  //checks if the speed of the pivot motor is within the deadzone and max speed parameters
+  void deadzone() {
+    if (speed < 0.1 && speed > -0.1) {
+      speed = 0.0;
+    } else {
+      if (speed > AlgaeIntakeConstants.PIVOTMAXSPEED) {
+        speed = AlgaeIntakeConstants.PIVOTMAXSPEED;
+      } else if (speed < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
+        speed = -AlgaeIntakeConstants.PIVOTMAXSPEED;
+      }
+    }
+  }
+
+  //runs the algae intake motor to a set speed
+  public void runIntakeMotor(double speed) {
     algaeIntake.set(TalonSRXControlMode.PercentOutput, speed);
   }
 
-  double deadzone(double speed){
-    if(speed < 0.1 && speed > -0.1){
-      return 0;
-    }
-    else{
-      if(speed > AlgaeIntakeConstants.PIVOTMAXSPEED){
-        return AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
-      else if (speed < -AlgaeIntakeConstants.PIVOTMAXSPEED){
-        return -AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
-      else{
-        return speed;
-      }
-    }
-  }
-
-  public void runPivotMotor(double speed){
-    algaePivot.set(TalonSRXControlMode.PercentOutput, deadzone(speed));
-  }
-
-  public void stopIntakeMotor(){
+  //stops the algae intake motor
+  public void stopIntakeMotor() {
     algaeIntake.set(TalonSRXControlMode.PercentOutput, 0);
   }
 
-  public void stopPivotMotor(){
+  //stops the algae pivot motor
+  public void stopPivotMotor() {
     algaePivot.set(TalonSRXControlMode.PercentOutput, 0);
   }
 
-  public void enablePID(){
+  //turns the PID on
+  public void enablePID() {
     PIDOn = true;
   }
 
-  public void disablePID(){
+  //turns the PID off
+  public void disablePID() {
     PIDOn = false;
   }
 
-  public boolean isDone(){
+  //returns if the PID is finished (PID is at setpoint or not)
+  public boolean isDone() {
     return pivotPID.atSetpoint();
   }
 
-  public void setSetpoint(double newSetpoint){
+  //sets the new setpoint for the PID
+  public void setSetpoint(double newSetpoint) {
     setpoint = newSetpoint;
+  }
+
+  //sets the new speed of the algae pivot motor (manual control)
+  public void setSpeed(double newSpeed){
+    speed = newSpeed;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
-    
-    if(PIDOn){
+
+    if (PIDOn) {
       output = pivotPID.calculate(getEncoder(), setpoint);
 
-      if(output > AlgaeIntakeConstants.PIVOTMAXSPEED){
+      if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
         output = AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
-      else if(output < -AlgaeIntakeConstants.PIVOTMAXSPEED){
+      } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
         output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
       }
-      
-      // || getLMValue()
-      if(isDone()){
+
+      if (isDone() || (getLSValue() && output > 0)) {
         disablePID();
         stopPivotMotor();
-      }
-      else{
+      } else {
         algaePivot.set(TalonSRXControlMode.Current, output);
+      }
+    } else {
+      if (getLSValue() && speed > 0) {
+        stopPivotMotor();
+      } else {
+        deadzone();
+        algaePivot.set(TalonSRXControlMode.PercentOutput, speed);
       }
     }
 
     SmartDashboard.putNumber("[A] Pivot PID Output:", output);
     SmartDashboard.putBoolean("[A] Optical Sensor:", getOpticalValue());
-    SmartDashboard.putBoolean("[A] Limit Switch:", getLMValue());
+    SmartDashboard.putBoolean("[A] Limit Switch:", getLSValue());
 
   }
 }
