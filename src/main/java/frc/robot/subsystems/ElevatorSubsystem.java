@@ -24,29 +24,45 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double previousError;
   private double currentError;
 
+  private boolean pidOn;
+
+  private double output;
+
   public ElevatorSubsystem() {
     elevatorMotor = new TalonFX(ElevatorConstants.LIFTID);
     topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
     bottomLimitSwitch = new DigitalInput(ElevatorConstants.BOTTOMLSID);
     pid = new PIDController(ElevatorConstants.KP, ElevatorConstants.KI, ElevatorConstants.KD);
 
+    output = 0;
+
     pid.setTolerance(ElevatorConstants.TOLERANCE);
     setpoint = getEncoder();
     previousError = 0;
 
+    pidOn = false;
+
     elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
-  public void moveElevator(double speed) {
-    elevatorMotor.set(deadzone(speed));
+  public void setElevatorSpeed(double speed) {
+    output = speed;
   }
 
   public boolean getTopLimitSwitch() {
-    return topLimitSwitch.get();
+    return !topLimitSwitch.get();
   }
 
   public boolean getBottomLimitSwitch() {
-    return bottomLimitSwitch.get();
+    return !bottomLimitSwitch.get();
+  }
+
+  public void turnPIDOn() {
+    pidOn = true;
+  }
+
+  public void turnPIDOff() {
+    pidOn = false;
   }
 
   public double getEncoder(){
@@ -58,10 +74,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void stopElevator() {
+    output = 0;
     elevatorMotor.set(0);
   }
 
-  public double deadzone(double input) {
+  private double deadzone(double input) {
     if (Math.abs(input) < 0.1) {
       return 0;
     }
@@ -107,30 +124,24 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     resetI();
 
-    double output = pid.calculate(getEncoder(), setpoint);
+    if (pidOn) {
+      output = pid.calculate(getEncoder(), setpoint);
+
+      if (atSetpoint()){
+        output = 0;
+        turnPIDOff();
+      }
+
+    }
 
     if (getBottomLimitSwitch() && output < 0){
       stopElevator();
-      output = 0;
     }
-
     else if (getTopLimitSwitch() && output > 0){
       stopElevator();
-      output = 0;
-    }
-
-    else if (atSetpoint()){
-      output = 0;
-    }
-
-    else if (output > ElevatorConstants.MAXSPEED) {
-      elevatorMotor.set(ElevatorConstants.MAXSPEED);
-    } 
-    else if (output < -ElevatorConstants.MAXSPEED) {
-      elevatorMotor.set(-ElevatorConstants.MAXSPEED);
     }
     else {
-      elevatorMotor.set(output);
+      elevatorMotor.set(deadzone(output));
     }
 
     // SmartDashboard
@@ -140,5 +151,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("[E] isAtSetpoint", atSetpoint());
     SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
     SmartDashboard.putBoolean("[E] Bottom LS", getBottomLimitSwitch());
+    SmartDashboard.putBoolean("[E] pidON", pidOn);
   }
 }

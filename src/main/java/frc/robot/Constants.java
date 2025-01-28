@@ -41,20 +41,20 @@ public final class Constants {
 
   public static class ElevatorConstants{
     //Motor ID's
-    public static final int LIFTID = 3;
+    public static final int LIFTID = 9;
 
     //Sensor ID's
     public static final int UPPERLSID = 3;
     public static final int BOTTOMLSID = 5;
 
     //PID Constants and Other Important Variables
-    public static final double KP = 0.0;
+    public static final double KP = 0.01;
     public static final double KI = 0.0;
     public static final double KD = 0.0;
 
-    public static final double TOLERANCE = 0.0; 
+    public static final double TOLERANCE = 5; 
 
-    public static final double MAXSPEED = 0.0;
+    public static final double MAXSPEED = 0.2;
   }
 }
 

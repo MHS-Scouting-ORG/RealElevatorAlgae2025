@@ -32,7 +32,7 @@ public class ManualElevatorCmd extends Command {
   @Override
   public void execute() {
 
-    elevatorSubsystem.moveElevator(speedSupplier.getAsDouble());
+    elevatorSubsystem.setElevatorSpeed(speedSupplier.getAsDouble());
 
   }
 
