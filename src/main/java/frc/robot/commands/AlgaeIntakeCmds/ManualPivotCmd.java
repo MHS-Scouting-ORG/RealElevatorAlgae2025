@@ -29,7 +29,7 @@ public class ManualPivotCmd extends Command {
   @Override
   public void execute() {
     double speed = x.getAsDouble();
-    algaeIntakeSub.setDesiredPivotSpeed(speed);
+    algaeIntakeSub.setSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.
