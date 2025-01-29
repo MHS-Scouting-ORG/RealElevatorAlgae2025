@@ -113,14 +113,14 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
       }
 
-      if (isDone() || (getLSValue() && output > 0)) {
+      if (isDone() || (getLSValue() && output < 0)) {
         disablePID();
         stopPivotMotor();
       } else {
         algaePivot.set(TalonSRXControlMode.Current, output);
       }
     } else {
-      if (getLSValue() && speed > 0) {
+      if (getLSValue() && speed < 0) {
         stopPivotMotor();
       } else {
         deadzone();
