@@ -33,9 +33,13 @@ public class RobotContainer {
   public RobotContainer() {
 
     elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
+<<<<<<< HEAD
 
     //joystick control for moving the algae pivot manually
     algaeIntakeSubsystem.setDefaultCommand(new ManualPivotCmd(algaeIntakeSubsystem, () -> xbox.getRightY()));
+=======
+    // algaeIntakeSubsystem.setDefaultCommand(new ManualPivotCmd(algaeIntakeSubsystem, () -> xbox.getRightY()));
+>>>>>>> 6b4dd21d621d6fc5751285128186988698c810ad
 
     configureBindings();
   }
@@ -43,9 +47,14 @@ public class RobotContainer {
   private void configureBindings() {
     
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TestPIDCmd(elevatorSubsystem, 100));
+<<<<<<< HEAD
 
     //button control for the storage position of the algae pivot
     new JoystickButton(xbox, XboxController.Button.kB.value).toggleOnTrue(new StoragePositionCmd(algaeIntakeSubsystem));
+=======
+    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new TestPIDCmd(elevatorSubsystem, 0));
+    // new JoystickButton(xbox, XboxController.Button.kB.value).toggleOnTrue(new StoragePositionCmd(algaeIntakeSubsystem));
+>>>>>>> 6b4dd21d621d6fc5751285128186988698c810ad
 
   }
 

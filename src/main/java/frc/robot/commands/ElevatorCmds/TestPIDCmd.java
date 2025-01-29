@@ -25,7 +25,9 @@ public class TestPIDCmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevatorSubsystem.turnPIDOn();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -38,14 +40,11 @@ public class TestPIDCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
-    elevatorSubsystem.stopElevator();
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atSetpoint() || elevatorSubsystem.getTopLimitSwitch() || elevatorSubsystem.getBottomLimitSwitch();
+    return elevatorSubsystem.atSetpoint();
   }
 }
