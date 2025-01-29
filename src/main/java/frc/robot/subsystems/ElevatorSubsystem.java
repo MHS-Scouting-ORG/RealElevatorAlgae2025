@@ -27,6 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private boolean pidOn;
 
   private double output;
+  private double manualOutput;
 
   public ElevatorSubsystem() {
     elevatorMotor = new TalonFX(ElevatorConstants.LIFTID);
@@ -35,6 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     pid = new PIDController(ElevatorConstants.KP, ElevatorConstants.KI, ElevatorConstants.KD);
 
     output = 0;
+    manualOutput = 0;
 
     pid.setTolerance(ElevatorConstants.TOLERANCE);
     setpoint = getEncoder();
@@ -46,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setElevatorSpeed(double speed) {
-    output = speed;
+    manualOutput = speed;
   }
 
   public boolean getTopLimitSwitch() {
@@ -128,25 +130,56 @@ public class ElevatorSubsystem extends SubsystemBase {
       output = pid.calculate(getEncoder(), setpoint);
 
       if (atSetpoint()){
+
         output = 0;
         turnPIDOff();
+
+      }
+      else{
+
+        if (getBottomLimitSwitch() && output < 0){
+          stopElevator();
+        }
+        else if (getTopLimitSwitch() && output > 0){
+          stopElevator();
+        }
+        else {
+
+          if (output > ElevatorConstants.MAXSPEED) {
+            elevatorMotor.set(ElevatorConstants.MAXSPEED);
+          }
+          else if (output < -ElevatorConstants.MAXSPEED) {
+            elevatorMotor.set(-ElevatorConstants.MAXSPEED);
+          }
+          else {
+            elevatorMotor.set(output);
+          }
+
+        }
+
       }
 
     }
 
-    if (getBottomLimitSwitch() && output < 0){
-      stopElevator();
-    }
-    else if (getTopLimitSwitch() && output > 0){
-      stopElevator();
-    }
-    else {
-      elevatorMotor.set(deadzone(output));
+
+    else{
+
+      if (getBottomLimitSwitch() && manualOutput < 0){
+        stopElevator();
+      }
+      else if (getTopLimitSwitch() && manualOutput > 0){
+        stopElevator();
+      }
+      else {
+        elevatorMotor.set(deadzone(manualOutput));
+      }
+      
     }
 
     // SmartDashboard
     SmartDashboard.putNumber("[E] Enc", getEncoder());
     SmartDashboard.putNumber("[E] Output", output);
+    SmartDashboard.putNumber("[E] Manual Output", manualOutput);
     SmartDashboard.putNumber("[E] Setpoint", setpoint);
     SmartDashboard.putBoolean("[E] isAtSetpoint", atSetpoint());
     SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
