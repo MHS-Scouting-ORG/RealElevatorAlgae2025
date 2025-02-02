@@ -14,18 +14,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  /** Creates a new ElevatorSubsystem. */
+  
+  // Motors
   private TalonFX elevatorMotor;
+
+  // Digital Inputs
   private DigitalInput topLimitSwitch;
   private DigitalInput bottomLimitSwitch;
 
+  // pid variables
   private PIDController pid;
   private double setpoint;
   private double previousError;
   private double currentError;
-
   private boolean pidOn;
 
+  // outputs
   private double output;
   private double manualOutput;
 
@@ -52,11 +56,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean getTopLimitSwitch() {
-    return !topLimitSwitch.get();
+    return topLimitSwitch.get();
   }
 
   public boolean getBottomLimitSwitch() {
-    return !bottomLimitSwitch.get();
+    return bottomLimitSwitch.get();
   }
 
   public void turnPIDOn() {
@@ -80,6 +84,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor.set(0);
   }
 
+  // deadzones manual inputs from -0.1 to 0.1 and caps the output at ElevatorConstants.MAXSPEED
   private double deadzone(double input) {
     if (Math.abs(input) < 0.1) {
       return 0;
@@ -97,9 +102,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setSetpoint(double newSetpoint) {
     setpoint = newSetpoint;
+    resetI();
   }
 
-  public void resetI() {
+  // resets the I value on overshoot
+  private void resetI() {
     currentError = pid.getPositionError();
 
     if (currentError > 0 && previousError < 0) {
@@ -126,55 +133,44 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     resetI();
 
+    // If pid is on, runs pid code to set output
     if (pidOn) {
       output = pid.calculate(getEncoder(), setpoint);
 
+      // Turns pid off at setpoint
       if (atSetpoint()){
-
         output = 0;
         turnPIDOff();
-
       }
       else{
 
-        if (getBottomLimitSwitch() && output < 0){
-          stopElevator();
+        // Caps output at ElevatorConstants.MAXSPEED
+        if (output > ElevatorConstants.MAXSPEED) {
+          output = ElevatorConstants.MAXSPEED;
         }
-        else if (getTopLimitSwitch() && output > 0){
-          stopElevator();
-        }
-        else {
-
-          if (output > ElevatorConstants.MAXSPEED) {
-            elevatorMotor.set(ElevatorConstants.MAXSPEED);
-          }
-          else if (output < -ElevatorConstants.MAXSPEED) {
-            elevatorMotor.set(-ElevatorConstants.MAXSPEED);
-          }
-          else {
-            elevatorMotor.set(output);
-          }
-
+        else if (output < -ElevatorConstants.MAXSPEED) {
+          output = -ElevatorConstants.MAXSPEED;
         }
 
       }
 
     }
 
-
+    // If pid is off, runs manual control
     else{
-
-      if (getBottomLimitSwitch() && manualOutput < 0){
-        stopElevator();
-      }
-      else if (getTopLimitSwitch() && manualOutput > 0){
-        stopElevator();
-      }
-      else {
-        elevatorMotor.set(deadzone(manualOutput));
-      }
-      
+      output = deadzone(manualOutput);
     }
+
+    // Stops elevator if it hits a limit switch and is moving in the same direction
+    if (getBottomLimitSwitch() && output < 0){
+      stopElevator();
+    }
+    else if (getTopLimitSwitch() && output > 0){
+      stopElevator();
+    }
+
+    // Final call to set output
+    elevatorMotor.set(output);
 
     // SmartDashboard
     SmartDashboard.putNumber("[E] Enc", getEncoder());
