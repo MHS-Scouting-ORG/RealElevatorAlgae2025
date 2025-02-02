@@ -27,15 +27,12 @@ public class TestPIDCmd extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
+    elevatorSubsystem.setSetpoint(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-    elevatorSubsystem.setSetpoint(setpoint);
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
