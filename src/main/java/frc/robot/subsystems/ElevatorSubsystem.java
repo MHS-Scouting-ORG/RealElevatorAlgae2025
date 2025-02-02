@@ -56,11 +56,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean getTopLimitSwitch() {
-    return !topLimitSwitch.get();
+    return topLimitSwitch.get();
   }
 
   public boolean getBottomLimitSwitch() {
-    return !bottomLimitSwitch.get();
+    return bottomLimitSwitch.get();
   }
 
   public void turnPIDOn() {
