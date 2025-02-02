@@ -31,7 +31,7 @@ public class RobotContainer {
   public final AlgaeIntakeSubsystem algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
 
   public RobotContainer() {
-
+ 
     elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
 
     //joystick control for moving the algae pivot manually
@@ -41,11 +41,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TestPIDCmd(elevatorSubsystem, 100));
     new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new TestPIDCmd(elevatorSubsystem, 0));
-    // new JoystickButton(xbox, XboxController.Button.kB.value).toggleOnTrue(new StoragePositionCmd(algaeIntakeSubsystem));
-
+    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaeIntakeSubsystem));
   }
 
   public Command getAutonomousCommand() {

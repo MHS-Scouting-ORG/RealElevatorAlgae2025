@@ -19,7 +19,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   private boolean PIDOn = false;
   private double output = 0.0;
-  private double setpoint = 0.0;
+  private double setpoint = 0;
 
   public AlgaeIntakeSubsystem() {
     algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);
@@ -31,9 +31,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
   }
 
-  //returns the integrated encoder value of the algae pivot motor 
+  //returns the raw integrated encoder value of the algae pivot motor 
   public double getEncoder() {
-    return algaePivot.getSelectedSensorPosition() / 1000;
+    return algaePivot.getSelectedSensorPosition();
   }
 
   //returns the value of the optical sensor (true or false)
@@ -47,14 +47,18 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   }
 
   //checks if the speed of the pivot motor is within the deadzone and max speed parameters
-  void deadzone() {
+  double deadzone(double newSpeed) {
+    speed = newSpeed;
     if (speed < 0.1 && speed > -0.1) {
-      speed = 0.0;
+      return 0.0;
     } else {
       if (speed > AlgaeIntakeConstants.PIVOTMAXSPEED) {
-        speed = AlgaeIntakeConstants.PIVOTMAXSPEED;
+        return AlgaeIntakeConstants.PIVOTMAXSPEED;
       } else if (speed < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
-        speed = -AlgaeIntakeConstants.PIVOTMAXSPEED;
+        return -AlgaeIntakeConstants.PIVOTMAXSPEED;
+      }
+      else{
+        return speed;
       }
     }
   }
@@ -113,20 +117,19 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
       }
 
-      if (isDone() || (getLSValue() && output < 0)) {
+      if (isDone()) {
         disablePID();
         stopPivotMotor();
-      } else {
-        algaePivot.set(TalonSRXControlMode.Current, output);
       }
-    } else {
-      if (getLSValue() && speed < 0) {
-        stopPivotMotor();
-      } else {
-        deadzone();
-        algaePivot.set(TalonSRXControlMode.PercentOutput, speed);
-      }
+
+      speed = output;
+    } 
+
+    if(getLSValue() && speed < 0){
+      stopPivotMotor();
     }
+
+    algaePivot.set(TalonSRXControlMode.PercentOutput, deadzone(speed));
 
     SmartDashboard.putNumber("[A] Pivot PID Output:", output);
     SmartDashboard.putBoolean("[A] Optical Sensor:", getOpticalValue());

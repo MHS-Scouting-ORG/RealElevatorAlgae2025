@@ -22,7 +22,7 @@ public final class Constants {
   public static class AlgaeIntakeConstants{
     //Motor ID's
     public static final int INTAKEID = 0;
-    public static final int PIVOTID = 12;
+    public static final int PIVOTID = 18;
 
     //Sensor ID's
     public static final int OPTICALID = 0;
