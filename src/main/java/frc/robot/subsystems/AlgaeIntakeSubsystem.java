@@ -22,12 +22,23 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   public AlgaeIntakeSubsystem() {
     algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);
     algaePivot = new TalonSRX(AlgaeIntakeConstants.PIVOTID);
-    algaePivot.setNeutralMode(NeutralMode.Brake);
+
     opticalSensor = new DigitalInput(AlgaeIntakeConstants.OPTICALID);
     limitSwitch = new DigitalInput(AlgaeIntakeConstants.LSID);
+
     pivotPID = new PIDController(AlgaeIntakeConstants.KP, AlgaeIntakeConstants.KI, AlgaeIntakeConstants.KD);
     pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
-  }
+
+    algaePivot.setNeutralMode(NeutralMode.Brake);
+    algaePivot.configPeakCurrentLimit(35, 10);
+    algaePivot.configPeakCurrentDuration(200, 10);
+    algaePivot.configContinuousCurrentLimit(30, 10);
+
+    algaeIntake.setNeutralMode(NeutralMode.Brake);
+    algaeIntake.configPeakCurrentLimit(35, 10);
+    algaeIntake.configPeakCurrentDuration(200, 10);
+    algaeIntake.configContinuousCurrentLimit(30, 10);
+    }
 
   //returns the raw integrated encoder value of the algae pivot motor 
   public double getEncoder() {

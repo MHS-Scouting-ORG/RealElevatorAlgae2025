@@ -21,12 +21,12 @@ public final class Constants {
 
   public static class AlgaeIntakeConstants{
     //Motor ID's
-    public static final int INTAKEID = 0;
+    public static final int INTAKEID = 9;
     public static final int PIVOTID = 18;
 
     //Sensor ID's
-    public static final int OPTICALID = 0;
-    public static final int LSID = 1;
+    public static final int OPTICALID = 1;
+    public static final int LSID = 0;
 
     //PID Constants and Other Important Variables
     public static final double KP = 0.01;
@@ -35,13 +35,13 @@ public final class Constants {
 
     public static final double TOLERANCE = 15.0;
 
-    public static final double INTAKEMAXSPEED = 0.0;
+    public static final double INTAKEMAXSPEED = 0.4;
     public static final double PIVOTMAXSPEED = 0.2;
   }
 
   public static class ElevatorConstants{
     //Motor ID's
-    public static final int LIFTID = 9;
+    public static final int LIFTID = 8;
 
     //Sensor ID's
     public static final int UPPERLSID = 3;
