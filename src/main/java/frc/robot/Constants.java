@@ -17,7 +17,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-  //LS = Limit Switch
+  //LS = Limit Switchs
 
   public static class AlgaeIntakeConstants{
     //Motor ID's
