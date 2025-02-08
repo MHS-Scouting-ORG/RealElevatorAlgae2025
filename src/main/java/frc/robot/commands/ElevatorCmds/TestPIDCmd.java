@@ -42,6 +42,6 @@ public class TestPIDCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atSetpoint();
+    return elevatorSubsystem.atSetpoint() || !elevatorSubsystem.getPID();
   }
 }
