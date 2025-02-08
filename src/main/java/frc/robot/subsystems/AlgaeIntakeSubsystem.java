@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -19,6 +20,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private double output = 0.0;
   private double setpoint = 0;
 
+
   public AlgaeIntakeSubsystem() {
     algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);
     algaePivot = new TalonSRX(AlgaeIntakeConstants.PIVOTID);
@@ -30,24 +32,22 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
 
     algaePivot.setNeutralMode(NeutralMode.Brake);
-    algaePivot.configPeakCurrentLimit(35, 10);
-    algaePivot.configPeakCurrentDuration(200, 10);
-    algaePivot.configContinuousCurrentLimit(30, 10);
 
     algaeIntake.setNeutralMode(NeutralMode.Brake);
-    algaeIntake.configPeakCurrentLimit(35, 10);
-    algaeIntake.configPeakCurrentDuration(200, 10);
-    algaeIntake.configContinuousCurrentLimit(30, 10);
     }
 
   //returns the raw integrated encoder value of the algae pivot motor 
   public double getEncoder() {
-    return algaePivot.getSelectedSensorPosition();
+    return algaePivot.getSensorCollection().getQuadraturePosition();
+  }
+
+  void resetEncoder(){
+    algaePivot.getSensorCollection().setQuadraturePosition(0, 0);
   }
 
   //returns the value of the optical sensor (true or false)
   public boolean getOpticalValue() {
-    return opticalSensor.get();
+    return !opticalSensor.get();
   }
 
   //returns the value of the limit switch (true or false)
@@ -117,16 +117,14 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
 
+    //reset the algae pivot encoders if touching the limit switch
+    if(getLSValue()){
+      resetEncoder();
+    }
+
     //if PID is on, calculate the output of the pivot motor
     if (PIDOn) {
       output = pivotPID.calculate(getEncoder(), setpoint);
-
-      //checks the output if it is within the max speeds
-      if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
-        output = AlgaeIntakeConstants.PIVOTMAXSPEED;
-      } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
-        output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
-      }
       
       //if the PID is at the setpoint, disable the PID and stop the pivot motor
       if (isDone()) {
