@@ -35,7 +35,8 @@ public final class Constants {
 
     public static final double TOLERANCE = 15.0;
 
-    public static final double INTAKEMAXSPEED = 0.4;
+    public static final double INTAKEMAXSPEED = 1.0;
+    public static final double OUTTAKEMAXSPEED = 1.0;
     public static final double PIVOTMAXSPEED = 0.2;
   }
 

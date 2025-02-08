@@ -47,7 +47,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   //returns the value of the optical sensor (true or false)
   public boolean getOpticalValue() {
-    return opticalSensor.get();
+    return !opticalSensor.get();
   }
 
   //returns the value of the limit switch (true or false)
