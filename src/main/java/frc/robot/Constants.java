@@ -41,7 +41,6 @@ public final class Constants {
     //Sensor ID's
     public static final int OPTICALID = 8;
     public static final int LSID = 9;
-    public static final int LSID = 0;
     
     //Current Limiting
     public static final boolean CURRENTLIMIT = true;
