@@ -2,16 +2,15 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.AlgaeIntakeCmds;
+package frc.robot.commands.AlgaePivotCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.AlgaePivotSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PickUpOffGroundPosition extends Command {
-  AlgaeIntakeSubsystem algaeIntakeSub;
-
-  public PickUpOffGroundPosition(AlgaeIntakeSubsystem newAlgaeIntakeSub) {
+public class DescorePosition extends Command {
+  AlgaePivotSubsystem algaeIntakeSub;
+  public DescorePosition(AlgaePivotSubsystem newAlgaeIntakeSub) {
     algaeIntakeSub = newAlgaeIntakeSub;
     addRequirements(algaeIntakeSub);
   }
