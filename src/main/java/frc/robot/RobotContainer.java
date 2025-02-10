@@ -3,7 +3,6 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorCmds.ManualElevatorCmd;
-import frc.robot.commands.ElevatorCmds.TestPIDCmd;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.commands.AlgaePivotCmds.ManualPivotCmd;
 import frc.robot.commands.AlgaePivotCmds.StoragePositionCmd;
@@ -36,8 +35,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TestPIDCmd(elevatorSubsystem, 100));
-    // new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new TestPIDCmd(elevatorSubsystem, 0));
 
     //button control to move the algae pivot to the storage position
     new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaePivotSubsystem));
