@@ -71,6 +71,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     pidOn = false;
   }
 
+  public boolean getPID() {
+    return pidOn;
+  }
+
   public double getEncoder(){
     return elevatorMotor.getPosition().getValueAsDouble();
   }
@@ -164,9 +168,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Stops elevator if it hits a limit switch and is moving in the same direction
     if (getBottomLimitSwitch() && output < 0){
       stopElevator();
+      turnPIDOff();
     }
     else if (getTopLimitSwitch() && output > 0){
       stopElevator();
+      turnPIDOff();
     }
 
     // Final call to set output
