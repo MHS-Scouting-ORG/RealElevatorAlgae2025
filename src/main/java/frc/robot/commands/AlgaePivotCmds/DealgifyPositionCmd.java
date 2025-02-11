@@ -8,10 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaePivotSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PickUpOffGroundPosition extends Command {
+public class DealgifyPositionCmd extends Command {
   AlgaePivotSubsystem algaeIntakeSub;
-
-  public PickUpOffGroundPosition(AlgaePivotSubsystem newAlgaeIntakeSub) {
+  public DealgifyPositionCmd(AlgaePivotSubsystem newAlgaeIntakeSub) {
     algaeIntakeSub = newAlgaeIntakeSub;
     addRequirements(algaeIntakeSub);
   }

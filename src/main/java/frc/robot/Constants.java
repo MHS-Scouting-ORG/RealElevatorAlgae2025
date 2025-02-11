@@ -45,11 +45,11 @@ public final class Constants {
     public static final boolean CURRENTLIMIT = true;
 
     //PID Constants and Other Important Variables
-    public static final double KP = 0.01;
-    public static final double KI = 0.0;
-    public static final double KD = 0.0;
+    public static final double KP = 0.0005;
+    public static final double KI = 0.;
+    public static final double KD = 0.;
 
-    public static final double TOLERANCE = 15.0;
+    public static final double TOLERANCE = 100.0;
 
     //Pivot Max Speed
     public static final double PIVOTMAXSPEED = 0.2;

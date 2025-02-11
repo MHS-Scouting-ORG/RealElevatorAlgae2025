@@ -1,20 +1,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
-  private TalonSRX algaeIntake, algaePivot;
-  private DigitalInput opticalSensor, limitSwitch;
-  private PIDController pivotPID;
+  private TalonSRX algaeIntake;
+  private DigitalInput opticalSensor;
 
   public AlgaeIntakeSubsystem() {
     algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);

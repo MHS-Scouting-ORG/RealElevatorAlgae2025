@@ -11,30 +11,32 @@ import frc.robot.subsystems.AlgaePivotSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualPivotCmd extends Command {
-  AlgaePivotSubsystem algaeIntakeSub;
+  AlgaePivotSubsystem algaePivotSub;
 
   DoubleSupplier x;
 
-  public ManualPivotCmd(AlgaePivotSubsystem newAlgaeIntakeSub, DoubleSupplier newX) {
-    algaeIntakeSub = newAlgaeIntakeSub;
+  public ManualPivotCmd(AlgaePivotSubsystem newAlgaePivotSub, DoubleSupplier newX) {
+    algaePivotSub = newAlgaePivotSub;
     x = newX;
-    addRequirements(algaeIntakeSub);
+    addRequirements(algaePivotSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+   
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeIntakeSub.setOutput(x.getAsDouble());
+    algaePivotSub.setOutput(x.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeIntakeSub.stopPivotMotor();
+    algaePivotSub.stopPivotMotor();
   }
 
   // Returns true when the command should end.

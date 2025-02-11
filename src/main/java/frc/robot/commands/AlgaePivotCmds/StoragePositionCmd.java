@@ -19,13 +19,13 @@ public class StoragePositionCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaeIntakeSub.setSetpoint(100);
+    algaeIntakeSub.enablePID();
+    algaeIntakeSub.setSetpoint(40000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeIntakeSub.enablePID();
   }
 
   // Called once the command ends or is interrupted.

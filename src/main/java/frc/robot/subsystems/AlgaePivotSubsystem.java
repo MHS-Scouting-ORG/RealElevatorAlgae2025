@@ -12,7 +12,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.AlgaePivotConstants;
 
 public class AlgaePivotSubsystem extends SubsystemBase {
@@ -54,22 +53,6 @@ public class AlgaePivotSubsystem extends SubsystemBase {
     return limitSwitch.get();
   }
 
-  //checks if the speed of the pivot motor is within the deadzone and max speed parameters
-  double deadzone(double newOutput) {
-    if (newOutput < 0.1 && newOutput > -0.1) {
-      return 0.0;
-    } else {
-      if (newOutput > AlgaePivotConstants.PIVOTMAXSPEED) {
-        return AlgaePivotConstants.PIVOTMAXSPEED;
-      } else if (newOutput < -AlgaePivotConstants.PIVOTMAXSPEED) {
-        return -AlgaePivotConstants.PIVOTMAXSPEED;
-      }
-      else{
-        return newOutput;
-      }
-    }
-  }
-
    //stops the algae pivot motor
   public void stopPivotMotor() {
     algaePivot.set(TalonSRXControlMode.PercentOutput, 0);
@@ -95,21 +78,30 @@ public class AlgaePivotSubsystem extends SubsystemBase {
     setpoint = newSetpoint;
   }
 
-  //sets the new output of the algae pivot motor (manual control)
+  //sets the new output of the algae pivot motor (manual control) and checks the output to see if it's within the max speed parameters
   public void setOutput(double newOutput){
     output = newOutput;
+    if(output > AlgaePivotConstants.PIVOTMAXSPEED){
+      output = AlgaePivotConstants.PIVOTMAXSPEED;
+    }
+    else if(newOutput < -AlgaePivotConstants.PIVOTMAXSPEED){
+      output = -AlgaePivotConstants.PIVOTMAXSPEED;
+    }
   }
 
   @Override
   public void periodic() {
-     //prints the raw integrated encoder value of the pivot motor and if the PID is finished or not
+     //prints the raw integrated encoder value of the pivot motor, if the PID is finished or not
     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
+    SmartDashboard.putBoolean("[A] PidOn?", PIDOn);
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
+    SmartDashboard.putData("[A] PID Controller", pivotPID);
+    // Allah uh akbar
 
     //reset the algae pivot encoders if touching the limit switch
-    if(getLSValue()){
-      resetEncoder();
-    }
+    // if(getLSValue()){
+    //   resetEncoder();
+    // }
 
     //if PID is on, calculate the output of the pivot motor
     if (PIDOn) {
@@ -125,10 +117,10 @@ public class AlgaePivotSubsystem extends SubsystemBase {
     //if the pivot motor is touching the limit switch and the output is negative, stop the motor
     if(getLSValue() && output < 0){
       stopPivotMotor();
-    }
+    }  
 
     //checks the output of the pivot motor and sets it to the motor if it is within the deadzone and max speeds
-    algaePivot.set(TalonSRXControlMode.PercentOutput, deadzone(output));
+    algaePivot.set(TalonSRXControlMode.PercentOutput, output);
 
     //prints the output of the pivot motor and if the limit switch is pressed or not
     SmartDashboard.putNumber("[A] Pivot PID Output:", output);

@@ -44,6 +44,7 @@ public class RobotContainer {
 
     new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new IntakeCmd(algaeIntakeSubsystem));
     new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(() -> algaePivotSubsystem.disablePID()));
   }
 
   public Command getAutonomousCommand() {
