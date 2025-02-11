@@ -39,7 +39,8 @@ public final class Constants {
     public static final int PIVOTID = 14;
 
     //Sensor ID's
-    public static final int LSID = 0;
+    public static final int OPTICALID = 8;
+    public static final int LSID = 9;
     
     //Current Limiting
     public static final boolean CURRENTLIMIT = true;
@@ -60,8 +61,8 @@ public final class Constants {
     public static final int LIFTID = 8;
 
     //Sensor ID's
-    public static final int UPPERLSID = 3;
-    public static final int BOTTOMLSID = 5;
+    public static final int UPPERLSID = 5;
+    public static final int BOTTOMLSID = 1;
 
     //PID Constants and Other Important Variables
     public static final double KP = 0.01;
