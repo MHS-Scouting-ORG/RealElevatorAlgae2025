@@ -5,12 +5,12 @@
 package frc.robot.commands.AlgaePivotCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaePivotSubsystem;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DealgifyPositionCmd extends Command {
-  AlgaePivotSubsystem algaeIntakeSub;
-  public DealgifyPositionCmd(AlgaePivotSubsystem newAlgaeIntakeSub) {
+  AlgaeIntakeSubsystem algaeIntakeSub;
+  public DealgifyPositionCmd(AlgaeIntakeSubsystem newAlgaeIntakeSub) {
     algaeIntakeSub = newAlgaeIntakeSub;
     addRequirements(algaeIntakeSub);
   }

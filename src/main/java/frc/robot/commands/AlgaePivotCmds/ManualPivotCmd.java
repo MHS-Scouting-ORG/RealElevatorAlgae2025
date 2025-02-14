@@ -7,15 +7,15 @@ package frc.robot.commands.AlgaePivotCmds;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaePivotSubsystem;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualPivotCmd extends Command {
-  AlgaePivotSubsystem algaePivotSub;
+  AlgaeIntakeSubsystem algaePivotSub;
 
   DoubleSupplier x;
 
-  public ManualPivotCmd(AlgaePivotSubsystem newAlgaePivotSub, DoubleSupplier newX) {
+  public ManualPivotCmd(AlgaeIntakeSubsystem newAlgaePivotSub, DoubleSupplier newX) {
     algaePivotSub = newAlgaePivotSub;
     x = newX;
     addRequirements(algaePivotSub);

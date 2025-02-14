@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlgaeIntakeCmds.IntakeCmd;
 import frc.robot.commands.AlgaeIntakeCmds.OuttakeCmd;
-import frc.robot.subsystems.AlgaePivotSubsystem;
+import frc.robot.commands.IntegratedCmds.TuckCmd;
 
 public class RobotContainer {
 
@@ -21,27 +21,26 @@ public class RobotContainer {
 
   public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   public final AlgaeIntakeSubsystem algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
-  public final AlgaePivotSubsystem algaePivotSubsystem = new AlgaePivotSubsystem();
-
+  
   public RobotContainer() {
  
-    elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
+    // elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
 
     //joystick control for moving the algae pivot manually
-    // algaeIntakeSubsystem.setDefaultCommand(new ManualPivotCmd(algaeIntakeSubsystem, () -> xbox.getRightY()));
-
-    algaeIntakeSubsystem.setDefaultCommand(new InstantCommand(() -> algaeIntakeSubsystem.runIntakeMotor(0.3), algaeIntakeSubsystem));
+    // algaePivotSubsystem.setDefaultCommand(new ManualPivotCmd(algaePivotSubsystem, () -> xbox.getRightY()));
     configureBindings();
   }
 
   private void configureBindings() {
 
     //button control to move the algae pivot to the storage position
-    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaePivotSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaePivotSubsystem));
 
+
+    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new InstantCommand(() -> algaeIntakeSubsystem.runIntakeMotor(0.1), algaeIntakeSubsystem));
     new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new IntakeCmd(algaeIntakeSubsystem));
     new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(() -> algaePivotSubsystem.disablePID()));
+    // new JoystickButton(xbox, XboxController.Button.kLeftBumper.value).onTrue(new TuckCmd());
   }
 
   public Command getAutonomousCommand() {

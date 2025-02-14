@@ -21,48 +21,41 @@ public final class Constants {
 
   public static class AlgaeIntakeConstants{
     //Motor ID's
-    public static final int INTAKEID = 15;
+    public static final int INTAKEID = 17;
     
     //Sensor ID's
-    public static final int OPTICALID = 1;
+    public static final int OPTICALID = 0;
 
     //Current Limiting
     public static final boolean CURRENTLIMIT = true;
 
     //Intake Max Speeds
-    public static final double INTAKEMAXSPEED = 0.6;
+    public static final double INTAKEMAXSPEED = 1.0;
     public static final double OUTTAKEMAXSPEED = 1.0;
-  }
 
-  public static class AlgaePivotConstants{
-    //Motor ID's
-    public static final int PIVOTID = 14;
+    public static final int PIVOTID = 18;
 
     //Sensor ID's
-    public static final int OPTICALID = 8;
-    public static final int LSID = 9;
-    
-    //Current Limiting
-    public static final boolean CURRENTLIMIT = true;
+    public static final int LSID = 3;
 
     //PID Constants and Other Important Variables
-    public static final double KP = 0.0005;
-    public static final double KI = 0.;
-    public static final double KD = 0.;
+    public static final double KP = 0.0;
+    public static final double KI = 0.0;
+    public static final double KD = 0.0;
 
     public static final double TOLERANCE = 100.0;
 
     //Pivot Max Speed
-    public static final double PIVOTMAXSPEED = 0.2;
+    public static final double PIVOTMAXSPEED = 0.3;
   }
 
   public static class ElevatorConstants{
     //Motor ID's
-    public static final int LIFTID = 8;
+    public static final int LIFTID = 14;
 
     //Sensor ID's
-    public static final int UPPERLSID = 5;
-    public static final int BOTTOMLSID = 1;
+    // public static final int UPPERLSID = 2;
+    public static final int BOTTOMLSID = 2;
 
     //PID Constants and Other Important Variables
     public static final double KP = 0.01;
@@ -71,7 +64,7 @@ public final class Constants {
 
     public static final double TOLERANCE = 5; 
 
-    public static final double MAXSPEED = 0.2;
+    public static final double MAXSPEED = 0.1;
   }
 }
 

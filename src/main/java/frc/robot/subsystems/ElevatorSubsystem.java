@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -35,9 +38,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     elevatorMotor = new TalonFX(ElevatorConstants.LIFTID);
-    topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
+    // topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
     bottomLimitSwitch = new DigitalInput(ElevatorConstants.BOTTOMLSID);
     pid = new PIDController(ElevatorConstants.KP, ElevatorConstants.KI, ElevatorConstants.KD);
+
+    elevatorMotor.getConfigurator().apply(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
 
     output = 0;
     manualOutput = 0;
@@ -55,12 +60,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     manualOutput = speed;
   }
 
-  public boolean getTopLimitSwitch() {
-    return topLimitSwitch.get();
-  }
+  // public boolean getTopLimitSwitch() {
+  //   return topLimitSwitch.get();
+  // }
 
   public boolean getBottomLimitSwitch() {
-    return bottomLimitSwitch.get();
+    return !bottomLimitSwitch.get();
   }
 
   public void turnPIDOn() {
@@ -170,10 +175,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       stopElevator();
       turnPIDOff();
     }
-    else if (getTopLimitSwitch() && output > 0){
-      stopElevator();
-      turnPIDOff();
-    }
+    // else if (getTopLimitSwitch() && output > 0){
+    //   stopElevator();
+    //   turnPIDOff();
+    // }
 
     // Final call to set output
     elevatorMotor.set(output);
@@ -184,7 +189,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[E] Manual Output", manualOutput);
     SmartDashboard.putNumber("[E] Setpoint", setpoint);
     SmartDashboard.putBoolean("[E] isAtSetpoint", atSetpoint());
-    SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
+    // SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
     SmartDashboard.putBoolean("[E] Bottom LS", getBottomLimitSwitch());
     SmartDashboard.putBoolean("[E] pidON", pidOn);
   }
