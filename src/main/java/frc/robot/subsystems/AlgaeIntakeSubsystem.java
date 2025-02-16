@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeIntakeConstants;
 
+import edu.wpi.first.wpilibj.Timer
+
 public class AlgaeIntakeSubsystem extends SubsystemBase {
   private TalonSRX algaeIntake, algaePivot;
   private DigitalInput opticalSensor;
@@ -22,6 +24,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private boolean PIDOn;
   private double output;
   private double setpoint;
+  private steadyStateTimer;
+
+  private static final double steadyStateTimeout = 1.0; // seconds
 
   public AlgaeIntakeSubsystem() {
     algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);
@@ -48,6 +53,10 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     PIDOn = false;
     output = 0.0;
+
+    steadyStateTimer = new Timer();
+	 steadyStateTimer.stop();
+	 steadyStateTimer.reset();
     }
 
   //returns the value of the optical sensor (true or false)
@@ -106,7 +115,29 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   //returns if the PID is finished (PID is at setpoint or not)
   public boolean isDone() {
-    return pivotPID.atSetpoint();
+    // Check if we're at the setpoint
+    if ( pivotPID.atSetpoint() ) {
+      // Make sure the timer is running
+      if ( !steadyStateTimer.isRunning() ) {
+        steadyStateTimer.start();
+      }
+
+      // If the timer is greater than the steady state wait time, then
+      // it's been at the setpoint long enough
+      if ( steadyStateTimer.get() >= steadyStateTimeout ) {
+        return true;
+      }
+
+      // Otherwise we act as though it has not yet hit the set point
+      return false;
+    }
+
+    // We are not at the set point.  Stop the timer and reset it.
+    steadyStateTimer.stop();
+    steadyStateTimer.reset();
+
+    // We're not at the set point so return false.
+    return false;
   }
 
   //sets the new setpoint for the PID
