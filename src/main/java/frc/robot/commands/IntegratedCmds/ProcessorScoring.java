@@ -5,15 +5,22 @@
 package frc.robot.commands.IntegratedCmds;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.commands.ElevatorCmds.ElevProcessorPos;
+import frc.robot.commands.AlgaePivotCmds.ProcessorPositionCmd;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ProcessorScoring extends SequentialCommandGroup {
-  /** Creates a new ProcessorScoring. */
-  public ProcessorScoring() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+  AlgaeIntakeSubsystem algaeIntakeSub;
+  ElevatorSubsystem elevatorSub;
+  //test commenty\
+  public ProcessorScoring(AlgaeIntakeSubsystem newAlgaeIntakeSub, ElevatorSubsystem newElevatorSub) {
+    algaeIntakeSub = newAlgaeIntakeSub;
+    elevatorSub = newElevatorSub;
+
+    addCommands(new ElevProcessorPos(elevatorSub), new ProcessorPositionCmd(algaeIntakeSub));
   }
 }
