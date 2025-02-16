@@ -11,7 +11,6 @@ import frc.robot.commands.ElevatorCmds.ManualElevatorCmd;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.commands.AlgaePivotCmds.DealgifyL3PositionCmd;
 import frc.robot.commands.AlgaePivotCmds.ManualPivotCmd;
-import frc.robot.commands.AlgaePivotCmds.StoragePositionCmd;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 import javax.print.attribute.standard.JobHoldUntil;
@@ -24,8 +23,6 @@ import frc.robot.commands.AlgaeIntakeCmds.IntakeCmd;
 import frc.robot.commands.AlgaeIntakeCmds.OuttakeCmd;
 import frc.robot.commands.IntegratedCmds.TuckCmd;
 import frc.robot.commands.AlgaePivotCmds.ProcessorPositionCmd;
-import frc.robot.commands.AlgaePivotCmds.StoragePositionCmd;
-import frc.robot.commands.AlgaePivotCmds.StoragePosition2Cmd;
 
 public class RobotContainer {
 
