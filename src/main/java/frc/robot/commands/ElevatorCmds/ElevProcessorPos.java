@@ -8,12 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class L2ElevPos extends Command {
-
+public class ElevProcessorPos extends Command {
   private ElevatorSubsystem elevatorSubsystem;
 
   /** Creates a new TestPIDCmda. */
-  public L2ElevPos(ElevatorSubsystem newElevatorSubsystem) {
+  public ElevProcessorPos(ElevatorSubsystem newElevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     elevatorSubsystem = newElevatorSubsystem;
@@ -25,7 +24,7 @@ public class L2ElevPos extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
-    elevatorSubsystem.setSetpoint(28);
+    elevatorSubsystem.setSetpoint(31);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

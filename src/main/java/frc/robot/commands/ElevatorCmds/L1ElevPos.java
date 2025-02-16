@@ -25,7 +25,7 @@ public class L1ElevPos extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
-    elevatorSubsystem.setSetpoint(40);
+    elevatorSubsystem.setSetpoint(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -3,8 +3,10 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorCmds.BottomElevPos;
+import frc.robot.commands.ElevatorCmds.ElevProcessorPos;
 import frc.robot.commands.ElevatorCmds.L1ElevPos;
 import frc.robot.commands.ElevatorCmds.L2ElevPos;
+import frc.robot.commands.ElevatorCmds.L3ElevPos;
 import frc.robot.commands.ElevatorCmds.ManualElevatorCmd;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.commands.AlgaePivotCmds.ManualPivotCmd;
@@ -38,11 +40,12 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new L2ElevPos(elevatorSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new L1ElevPos(elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new L3ElevPos(elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new L2ElevPos(elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new ElevProcessorPos(elevatorSubsystem));
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new BottomElevPos(elevatorSubsystem));
 
-    new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> elevatorSubsystem.turnPIDOff()));
+    // new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> elevatorSubsystem.turnPIDOff()));
 
     //button control to move the algae pivot to the storage position
     // new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new StoragePositionCmd(algaePivotSubsystem));

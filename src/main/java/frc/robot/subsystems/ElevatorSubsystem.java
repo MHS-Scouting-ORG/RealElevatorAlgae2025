@@ -119,7 +119,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   // resets the I value on overshoot
   private void resetI() {
     currentError = pid.getPositionError();
-
     if (currentError > 0 && previousError < 0) {
       pid.reset();
     } else if (currentError < 0 && previousError > 0) {

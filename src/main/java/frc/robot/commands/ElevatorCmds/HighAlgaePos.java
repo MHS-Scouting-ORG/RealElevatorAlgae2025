@@ -25,7 +25,7 @@ public class HighAlgaePos extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
-    elevatorSubsystem.setSetpoint(0);
+    elevatorSubsystem.setSetpoint(78);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
