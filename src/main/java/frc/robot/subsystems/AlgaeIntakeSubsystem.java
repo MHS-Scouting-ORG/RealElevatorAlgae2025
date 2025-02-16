@@ -158,23 +158,22 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       resetEncoder();
     }
 
+    //resets the integral term of the pivot pid
     resetI();
 
-    // if PID is on, calculate the output of the pivot motor
+    // if PID is on, calculate the output of the pivot motor controller
     if (PIDOn) { 
       output = pivotPID.calculate(getEncoder(), setpoint);
-
-
     }
 
+    //checks the output to see if it is within the max and min speed limits
     if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
       output = AlgaeIntakeConstants.PIVOTMAXSPEED;
     } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
       output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
     }
 
-    // checks the output of the pivot motor and sets it to the motor if it is within
-    // the deadzone and max speeds
+    //sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);
 
     // prints the output of the pivot motor and if the limit switch is pressed or
