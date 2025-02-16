@@ -9,6 +9,7 @@ import frc.robot.commands.AlgaePivotCmds.DealgifyL3PositionCmd;
 import frc.robot.commands.ElevatorCmds.L3ElevPos;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.commands.IntegratedCmds.TuckCmd;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -29,7 +30,7 @@ public class L3Dealgify extends SequentialCommandGroup {
     addCommands(
       new L3ElevPos(elevatorSubsystem),
       new DealgifyL3PositionCmd(algaeIntakeSubsystem),
-      new TuckCmd()
+      new TuckCmd(algaeIntakeSubsystem, elevatorSubsystem)
     );
   }
 }

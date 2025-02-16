@@ -11,6 +11,7 @@ import frc.robot.commands.ElevatorCmds.BottomElevPos;
 import frc.robot.commands.ElevatorCmds.ElevProcessorPos;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.commands.IntegratedCmds.TuckWithAlgae;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -32,7 +33,7 @@ public class AlgaeGroundPickup extends SequentialCommandGroup {
     new ProcessorPositionCmd(algaeIntakeSubsystem), 
     new BottomElevPos(elevatorSubsystem), 
     new IntakeCmd(algaeIntakeSubsystem), 
-    new TuckWithAlgae()
+    new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
     );
   }
 }

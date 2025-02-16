@@ -10,6 +10,7 @@ import frc.robot.commands.AlgaePivotCmds.ProcessorPositionCmd;
 import frc.robot.commands.ElevatorCmds.L2ElevPos;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.commands.IntegratedCmds.TuckWithAlgae;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -31,7 +32,7 @@ public class L2Dealgify extends SequentialCommandGroup {
       new L2ElevPos(elevatorSubsystem),
       new ProcessorPositionCmd(algaeIntakeSubsystem),
       new IntakeCmd(algaeIntakeSubsystem),
-      new TuckWithAlgae()
+      new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
     );
   }
 }
