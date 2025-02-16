@@ -71,8 +71,14 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     return opticalSensor.get();
   }
 
-  public double getIntakeAmps() {
-    return algaeIntake.getBusVoltage();
+  // returns the supply current of the algae intake motor controller
+  public double getIntakeSupplyCurrent() {
+    return algaeIntake.getSupplyCurrent();
+  }
+
+  // returns the supply current of the algae pivot motor controller
+  public double getPivotSupplyCurrent() {
+    return algaeIntake.getSupplyCurrent();
   }
 
   // runs the algae intake motor to a set speed
@@ -125,8 +131,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     if (currentError > 0 && previousError < 0) {
       pivotPID.reset();
-    } 
-    else if (currentError < 0 && previousError > 0) {
+    } else if (currentError < 0 && previousError > 0) {
       pivotPID.reset();
     }
 
@@ -165,21 +170,22 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     setpoint = newSetpoint;
   }
 
-  // sets the new output of the algae pivot motor (manual control) and checks the
-  // output to see if it's within the max speed parameters
+  // sets the new output of the algae pivot motor (manual control)
   public void setOutput(double newOutput) {
-    output = newOutput;
-    if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
-      output = AlgaeIntakeConstants.PIVOTMAXSPEED;
-    } else if (newOutput < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
-      output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
+    // checks the output to see if it is within the max and min manual speed limits
+    if (output > AlgaeIntakeConstants.MANUALPIVOTMAXSPEED) {
+      output = AlgaeIntakeConstants.MANUALPIVOTMAXSPEED;
+    } else if (output < -AlgaeIntakeConstants.MANUALPIVOTMAXSPEED) {
+      output = -AlgaeIntakeConstants.MANUALPIVOTMAXSPEED;
+    } else {
+      output = newOutput;
     }
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("[A] Optical Sensor:", getOpticalValue());
-    SmartDashboard.putNumber("[A] AMPs", getIntakeAmps());
+    SmartDashboard.putNumber("[A] Supply Current", getIntakeSupplyCurrent());
     SmartDashboard.putNumber("[A] test", algaeIntake.isFwdLimitSwitchClosed());
 
     // prints the raw integrated encoder value of the pivot motor, if the PID is
@@ -189,27 +195,36 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
     SmartDashboard.putData("[A] PID Controller", pivotPID);
 
-    //reset the algae pivot encoders if touching the limit switch
-    if(getLSValue()){
+    // reset the algae pivot encoders if touching the limit switch
+    if (getLSValue()) {
       resetEncoder();
     }
 
-    //resets the integral term of the pivot pid
+    // resets the integral term of the pivot pid
     resetI();
 
     // if PID is on, calculate the output of the pivot motor controller
-    if (PIDOn) { 
+    if (PIDOn) {
       output = pivotPID.calculate(getEncoder(), setpoint);
+
+      // checks the output to see if it is within the max and min speed limits
+      if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
+        output = AlgaeIntakeConstants.PIVOTMAXSPEED;
+      } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
+        output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
+      }
     }
 
-    //checks the output to see if it is within the max and min speed limits
-    if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
-      output = AlgaeIntakeConstants.PIVOTMAXSPEED;
-    } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
-      output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
-    }
+    // KEANIS TESTING CODE
+    // if (isDone()) {
+    //   if (output > 0.2) {
+    //     output = 0.2;
+    //   } else if (output < -0.2) {
+    //     output = -0.2;
+    //   }
+    // }
 
-    //sets the output to the algae pivot motor controller
+    // sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);
 
     // prints the output of the pivot motor and if the limit switch is pressed or
