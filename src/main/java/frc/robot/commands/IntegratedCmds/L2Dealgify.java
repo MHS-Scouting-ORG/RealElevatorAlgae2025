@@ -32,7 +32,7 @@ public class L2Dealgify extends SequentialCommandGroup {
       new L2ElevPos(elevatorSubsystem),
       new ProcessorPositionCmd(algaeIntakeSubsystem),
       new IntakeCmd(algaeIntakeSubsystem),
-      new TuckWithAlgae()
+      new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
     );
   }
 }

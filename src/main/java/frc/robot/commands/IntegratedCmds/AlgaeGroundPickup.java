@@ -34,7 +34,7 @@ public class AlgaeGroundPickup extends SequentialCommandGroup {
     new ProcessorPositionCmd(algaeIntakeSubsystem), 
     new BottomElevPos(elevatorSubsystem), 
     new IntakeCmd(algaeIntakeSubsystem), 
-    new AlgaeTuckCmd(algaeIntakeSubsystem)
+    new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
     );
   }
 }
