@@ -6,6 +6,7 @@ package frc.robot.commands.ElevatorCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class BottomElevPos extends Command {
@@ -30,7 +31,8 @@ public class BottomElevPos extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -40,6 +42,6 @@ public class BottomElevPos extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atSetpoint() || !elevatorSubsystem.getPID();
+    return false;
   }
 }
