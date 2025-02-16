@@ -6,6 +6,7 @@ package frc.robot.commands.IntegratedCmds;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlgaeIntakeCmds.IntakeCmd;
+import frc.robot.commands.AlgaePivotCmds.AlgaeTuckCmd;
 import frc.robot.commands.AlgaePivotCmds.ProcessorPositionCmd;
 import frc.robot.commands.ElevatorCmds.BottomElevPos;
 import frc.robot.commands.ElevatorCmds.ElevProcessorPos;
@@ -33,7 +34,7 @@ public class AlgaeGroundPickup extends SequentialCommandGroup {
     new ProcessorPositionCmd(algaeIntakeSubsystem), 
     new BottomElevPos(elevatorSubsystem), 
     new IntakeCmd(algaeIntakeSubsystem), 
-    new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
+    new AlgaeTuckCmd(algaeIntakeSubsystem)
     );
   }
 }
