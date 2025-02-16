@@ -30,7 +30,7 @@ public class L3Dealgify extends SequentialCommandGroup {
     addCommands(
       new L3ElevPos(elevatorSubsystem),
       new DealgifyL3PositionCmd(algaeIntakeSubsystem),
-      new TuckCmd()
+      new TuckCmd(algaeIntakeSubsystem, elevatorSubsystem)
     );
   }
 }
