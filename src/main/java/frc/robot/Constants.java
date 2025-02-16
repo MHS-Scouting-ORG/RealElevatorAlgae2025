@@ -39,14 +39,16 @@ public final class Constants {
     public static final int LSID = 3;
 
     //PID Constants and Other Important Variables
-    public static final double KP = 0.0;
-    public static final double KI = 0.0;
-    public static final double KD = 0.0;
+    //0.000000000001
+    //0.0003
+    public static final double KP = 0.00077;
+    public static final double KI = 0.0007;//0.0005; //0.0004;
+    public static final double KD = 0.0; //0.00005;
 
-    public static final double TOLERANCE = 100.0;
+    public static final double TOLERANCE = 25;
 
     //Pivot Max Speed
-    public static final double PIVOTMAXSPEED = 0.3;
+    public static final double PIVOTMAXSPEED = 0.5;
   }
 
   public static class ElevatorConstants{
@@ -54,7 +56,7 @@ public final class Constants {
     public static final int LIFTID = 14;
 
     //Sensor ID's
-    // public static final int UPPERLSID = 2;
+    public static final int UPPERLSID = 3;
     public static final int BOTTOMLSID = 2;
 
     //PID Constants and Other Important Variables

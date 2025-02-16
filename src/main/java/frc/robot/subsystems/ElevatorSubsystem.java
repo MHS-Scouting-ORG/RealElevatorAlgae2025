@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     elevatorMotor = new TalonFX(ElevatorConstants.LIFTID);
-    // topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
+    topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
     bottomLimitSwitch = new DigitalInput(ElevatorConstants.BOTTOMLSID);
     pid = new PIDController(ElevatorConstants.KP, ElevatorConstants.KI, ElevatorConstants.KD);
 
@@ -60,9 +60,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     manualOutput = speed;
   }
 
-  // public boolean getTopLimitSwitch() {
-  //   return topLimitSwitch.get();
-  // }
+  public boolean getTopLimitSwitch() {
+    return !topLimitSwitch.get();
+  }
 
   public boolean getBottomLimitSwitch() {
     return !bottomLimitSwitch.get();
@@ -175,10 +175,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       stopElevator();
       turnPIDOff();
     }
-    // else if (getTopLimitSwitch() && output > 0){
-    //   stopElevator();
-    //   turnPIDOff();
-    // }
+    else if (getTopLimitSwitch() && output > 0){
+      stopElevator();
+      turnPIDOff();
+    }
 
     // Final call to set output
     elevatorMotor.set(output);
@@ -189,7 +189,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[E] Manual Output", manualOutput);
     SmartDashboard.putNumber("[E] Setpoint", setpoint);
     SmartDashboard.putBoolean("[E] isAtSetpoint", atSetpoint());
-    // SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
+    SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
     SmartDashboard.putBoolean("[E] Bottom LS", getBottomLimitSwitch());
     SmartDashboard.putBoolean("[E] pidON", pidOn);
   }

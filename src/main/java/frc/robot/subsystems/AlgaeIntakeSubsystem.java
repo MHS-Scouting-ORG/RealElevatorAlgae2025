@@ -20,6 +20,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   private PIDController pivotPID;
   private boolean PIDOn;
+  private double previousError;
+  private double currentError;
   private double output;
   private double setpoint;
 
@@ -40,7 +42,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     pivotPID = new PIDController(AlgaeIntakeConstants.KP, AlgaeIntakeConstants.KI, AlgaeIntakeConstants.KD);
     pivotPID.setTolerance(AlgaeIntakeConstants.TOLERANCE);
 
-    algaePivot.setNeutralMode(NeutralMode.Brake); 
+    algaePivot.setNeutralMode(NeutralMode.Brake);
     algaePivot.enableCurrentLimit(AlgaeIntakeConstants.CURRENTLIMIT);
     algaePivot.configPeakCurrentLimit(25);
     algaePivot.configPeakCurrentDuration(100, 50);
@@ -48,81 +50,94 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     PIDOn = false;
     output = 0.0;
-    }
+  }
 
-  //returns the value of the optical sensor (true or false)
+  // returns output of motor
+  public double getOutput() {
+    return output;
+  }
+
+  // returns the value of the optical sensor (true or false)
   public boolean getOpticalValue() {
     return opticalSensor.get();
   }
 
-  public double getIntakeAmps(){
+  public double getIntakeAmps() {
     return algaeIntake.getBusVoltage();
   }
 
-  //runs the algae intake motor to a set speed
+  // runs the algae intake motor to a set speed
   public void runIntakeMotor(double speed) {
     algaeIntake.set(TalonSRXControlMode.PercentOutput, speed);
   }
 
-  //stops the algae intake motor
+  // stops the algae intake motor
   public void stopIntakeMotor() {
     algaeIntake.set(TalonSRXControlMode.PercentOutput, 0);
   }
 
-  //returns the raw integrated encoder value of the algae pivot motor 
+  // returns the raw integrated encoder value of the algae pivot motor
   public double getEncoder() {
     return algaePivot.getSensorCollection().getQuadraturePosition();
   }
 
-  //resets the algae pivot integrated encoder to 0
-  void resetEncoder(){
+  // resets the algae pivot integrated encoder to 0
+  void resetEncoder() {
     algaePivot.getSensorCollection().setQuadraturePosition(0, 0);
   }
 
-  //returns the value of the limit switch (true or false)
+  // returns the value of the limit switch (true or false)
   public boolean getLSValue() {
-    if(algaeIntake.isFwdLimitSwitchClosed() == 1){
+    if (algaeIntake.isFwdLimitSwitchClosed() == 1) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
 
-   //stops the algae pivot motor
+  // stops the algae pivot motor
   public void stopPivotMotor() {
     algaePivot.set(TalonSRXControlMode.PercentOutput, 0);
   }
 
-  //turns the PID on
+  // turns the PID on
   public void enablePID() {
     PIDOn = true;
   }
 
-  //turns the PID off
+  // turns the PID off
   public void disablePID() {
     PIDOn = false;
   }
 
-  //returns if the PID is finished (PID is at setpoint or not)
-  public boolean isDone() {
-    return pivotPID.atSetpoint();
+  // resets the I value on overshoot
+  private void resetI() {
+    currentError = pivotPID.getPositionError();
+
+    if (currentError > 0 && previousError < 0) {
+      pivotPID.reset();
+    } 
+    else if (currentError < 0 && previousError > 0) {
+      pivotPID.reset();
+    }
+
+    previousError = currentError;
   }
 
-  //sets the new setpoint for the PID
+  // returns if the PID is finished (PID is at setpoint or not)
+  public boolean isDone() {
+    return pivotPID.atSetpoint();//(AlgaeIntakeConstants.TOLERANCE > Math.abs(currentError));
+  }
+
+  // sets the new setpoint for the PID
   public void setSetpoint(double newSetpoint) {
     setpoint = newSetpoint;
   }
 
-  //sets the new output of the algae pivot motor (manual control) and checks the output to see if it's within the max speed parameters
-  public void setOutput(double newOutput){
+  // sets the new output of the algae pivot motor (manual control) and checks the
+  // output to see if it's within the max speed parameters
+  public void setOutput(double newOutput) {
     output = newOutput;
-    if(output > AlgaeIntakeConstants.PIVOTMAXSPEED){
-      output = AlgaeIntakeConstants.PIVOTMAXSPEED;
-    }
-    else if(newOutput < -AlgaeIntakeConstants.PIVOTMAXSPEED){
-      output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
-    }
   }
 
   @Override
@@ -131,40 +146,41 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[A] AMPs", getIntakeAmps());
     SmartDashboard.putNumber("[A] test", algaeIntake.isFwdLimitSwitchClosed());
 
-     //prints the raw integrated encoder value of the pivot motor, if the PID is finished or not
-     SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
-     SmartDashboard.putBoolean("[A] PidOn?", PIDOn);
-     SmartDashboard.putBoolean("[A] isFinished?", isDone());
-     SmartDashboard.putData("[A] PID Controller", pivotPID);
-     // Allah uh akbar
- 
-     //reset the algae pivot encoders if touching the limit switch
-     // if(getLSValue()){
-     //   resetEncoder();
-     // }
- 
-     //if PID is on, calculate the output of the pivot motor
-     if (PIDOn) {
-       output = pivotPID.calculate(getEncoder(), setpoint);
-       
-       //if the PID is at the setpoint, disable the PID and stop the pivot motor
-       if (isDone() || getLSValue()) {
-         disablePID();
-         stopPivotMotor();
-       }
-     } 
- 
-     //if the pivot motor is touching the limit switch and the output is negative, stop the motor
-     if(getLSValue() && output < 0){
-       stopPivotMotor();
-     }  
- 
-     //checks the output of the pivot motor and sets it to the motor if it is within the deadzone and max speeds
-     algaePivot.set(TalonSRXControlMode.PercentOutput, output);
- 
-     //prints the output of the pivot motor and if the limit switch is pressed or not
-     SmartDashboard.putNumber("[A] Pivot PID Output:", output);
-     SmartDashboard.putBoolean("[A] Limit Switch:", getLSValue());
+    // prints the raw integrated encoder value of the pivot motor, if the PID is
+    // finished or not
+    SmartDashboard.putNumber("[A] Pivot Encoder:", getEncoder());
+    SmartDashboard.putBoolean("[A] PidOn?", PIDOn);
+    SmartDashboard.putBoolean("[A] isFinished?", isDone());
+    SmartDashboard.putData("[A] PID Controller", pivotPID);
+
+    //reset the algae pivot encoders if touching the limit switch
+    if(getLSValue()){
+      resetEncoder();
+    }
+
+    resetI();
+
+    // if PID is on, calculate the output of the pivot motor
+    if (PIDOn) { 
+      output = pivotPID.calculate(getEncoder(), setpoint);
+
+
+    }
+
+    if (output > AlgaeIntakeConstants.PIVOTMAXSPEED) {
+      output = AlgaeIntakeConstants.PIVOTMAXSPEED;
+    } else if (output < -AlgaeIntakeConstants.PIVOTMAXSPEED) {
+      output = -AlgaeIntakeConstants.PIVOTMAXSPEED;
+    }
+
+    // checks the output of the pivot motor and sets it to the motor if it is within
+    // the deadzone and max speeds
+    algaePivot.set(TalonSRXControlMode.PercentOutput, output);
+
+    // prints the output of the pivot motor and if the limit switch is pressed or
+    // not
+    SmartDashboard.putNumber("[A] Pivot PID Output:", output);
+    SmartDashboard.putBoolean("[A] Limit Switch:", getLSValue());
 
   }
 }
