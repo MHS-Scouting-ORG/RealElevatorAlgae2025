@@ -5,12 +5,13 @@
 package frc.robot.commands.AlgaePivotCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DealgifyPositionCmd extends Command {
+public class DealgifyL3PositionCmd extends Command {
   AlgaeIntakeSubsystem algaeIntakeSub;
-  public DealgifyPositionCmd(AlgaeIntakeSubsystem newAlgaeIntakeSub) {
+  public DealgifyL3PositionCmd(AlgaeIntakeSubsystem newAlgaeIntakeSub) {
     algaeIntakeSub = newAlgaeIntakeSub;
     addRequirements(algaeIntakeSub);
   }
@@ -18,22 +19,26 @@ public class DealgifyPositionCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaeIntakeSub.setSetpoint(0);
+    algaeIntakeSub.disablePID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeIntakeSub.enablePID();
+    algaeIntakeSub.setOutput(-1.0);
+    algaeIntakeSub.runIntakeMotor(-AlgaeIntakeConstants.INTAKEMAXSPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    algaeIntakeSub.setOutput(0.0);
+    algaeIntakeSub.stopIntakeMotor();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return algaeIntakeSub.getEncoder() < -1750;
   }
 }

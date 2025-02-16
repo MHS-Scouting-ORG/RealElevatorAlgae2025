@@ -19,7 +19,7 @@ public class StoragePositionCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaePivotSub.setSetpoint(10000);
+    algaePivotSub.setSetpoint(-385);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,6 +36,6 @@ public class StoragePositionCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return algaePivotSub.isDone();
+    return false;
   }
 }
