@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
   private final Command disableAlgaePivotPID;
 
+  private Command elevInit;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    elevInit = m_robotContainer.ElevInit();
     disableAlgaePivotPID = m_robotContainer.disableAlgaeIntakePID();
   }
 
@@ -76,6 +78,10 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+    elevInit.schedule();
+    elevInit.cancel();
+
 
     disableAlgaePivotPID.schedule();
     disableAlgaePivotPID.cancel();
