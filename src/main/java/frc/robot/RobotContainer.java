@@ -40,10 +40,10 @@ public class RobotContainer {
   
   public RobotContainer() {
  
-    // elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
+    elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
 
     //joystick control for moving the algae pivot manually
-    algaeIntakeSubsystem.setDefaultCommand(new ManualPivotCmd(algaeIntakeSubsystem, () -> xbox.getRightY()));
+    // algaeIntakeSubsystem.setDefaultCommand(new ManualPivotCmd(algaeIntakeSubsystem, () -> xbox.getRightY()));
     configureBindings();
   }
 
@@ -57,13 +57,13 @@ public class RobotContainer {
 
     //button control to move the algae pivot to the storage position
     // new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new DealgifyL3PositionCmd(algaeIntakeSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new ProcessorPositionCmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new ProcessorPositionCmd(algaeIntakeSubsystem));
     // new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new StoragePositionCmd(algaeIntakeSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kLeftBumper.value).onTrue(new StoragePosition2Cmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kLeftBumper.value).onTrue(new StoragePosition2Cmd(algaeIntakeSubsystem));
 
 
-    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new IntakeCmd(algaeIntakeSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new IntakeCmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
   }
 
   public Command ElevInit() {
