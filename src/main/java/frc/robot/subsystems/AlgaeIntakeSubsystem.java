@@ -216,13 +216,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     }
 
     // KEANIS TESTING CODE
-    // if (isDone()) {
-    //   if (output > 0.2) {
-    //     output = 0.2;
-    //   } else if (output < -0.2) {
-    //     output = -0.2;
-    //   }
-    // }
+    if (isDone()) {
+      if (output > 0.2) {
+        output = 0.2;
+      } else if (output < -0.2) {
+        output = -0.2;
+      }
+    }
 
     // sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);

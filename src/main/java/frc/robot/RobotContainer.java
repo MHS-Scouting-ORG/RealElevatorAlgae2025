@@ -35,6 +35,8 @@ public class RobotContainer {
   public final Command elevInit = new InstantCommand(() -> elevatorSubsystem.turnPIDOff(), elevatorSubsystem);
 
   public Command disableAlgaeIntakePID = new InstantCommand(() -> algaeIntakeSubsystem.disablePID(), algaeIntakeSubsystem);
+
+  public Command algaeInit = new StoragePosition2Cmd(algaeIntakeSubsystem);
   
   public RobotContainer() {
  
@@ -60,8 +62,8 @@ public class RobotContainer {
     new JoystickButton(xbox, XboxController.Button.kLeftBumper.value).onTrue(new StoragePosition2Cmd(algaeIntakeSubsystem));
 
 
-    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new IntakeCmd(algaeIntakeSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new IntakeCmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
   }
 
   public Command ElevInit() {
@@ -69,10 +71,14 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.exampleAuto();
+    return Autos.exampleAuto(algaeIntakeSubsystem);
   }
 
   public Command disableAlgaeIntakePID(){
     return disableAlgaeIntakePID;
+  }
+
+  public Command algaeInit(){
+    return algaeInit;
   }
 }

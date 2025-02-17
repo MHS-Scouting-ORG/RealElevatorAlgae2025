@@ -19,26 +19,30 @@ public class StoragePosition2Cmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaeIntakeSub.setSetpoint(5);
+    algaeIntakeSub.setSetpoint(1);
     algaeIntakeSub.enablePID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(algaeIntakeSub.getLSValue()){
-      algaeIntakeSub.disablePID();
-      algaeIntakeSub.setOutput(0.1);
-    }
+    // algaeIntakeSub.setOutput(0.3);
+    // if(algaeIntakeSub.getLSValue()){
+    //   algaeIntakeSub.disablePID();
+    //   algaeIntakeSub.setOutput(0.1);
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    // algaeIntakeSub.disablePID();
+    // algaeIntakeSub.setOutput(0.15);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return algaeIntakeSub.getLSValue();
   }
 }

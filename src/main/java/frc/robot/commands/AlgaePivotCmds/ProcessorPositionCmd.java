@@ -23,7 +23,7 @@ public class ProcessorPositionCmd extends Command {
   @Override
   public void initialize() {
     timer.reset();
-    algaeIntakeSub.setSetpoint(-1000); //-1350
+    algaeIntakeSub.setSetpoint(-1100); //-1350
     algaeIntakeSub.enablePID();
   }
 

@@ -19,6 +19,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
   private final Command disableAlgaePivotPID;
+  private final Command algaeInit;
 
   private Command elevInit;
   /**
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     elevInit = m_robotContainer.ElevInit();
+    algaeInit = m_robotContainer.algaeInit();
     disableAlgaePivotPID = m_robotContainer.disableAlgaeIntakePID();
   }
 
@@ -82,9 +84,11 @@ public class Robot extends TimedRobot {
     elevInit.schedule();
     elevInit.cancel();
 
+    // disableAlgaePivotPID.schedule();
+    // disableAlgaePivotPID.cancel();
 
-    disableAlgaePivotPID.schedule();
-    disableAlgaePivotPID.cancel();
+    // algaeInit.schedule();
+    // algaeInit.cancel();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
