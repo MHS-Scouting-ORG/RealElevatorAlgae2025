@@ -26,7 +26,7 @@ public class BottomElevPos extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
-    elevatorSubsystem.setSetpoint(0);
+    elevatorSubsystem.setSetpoint(0); //10 encoders for ground pickup
   }
 
   // Called every time the scheduler runs while the command is scheduled.

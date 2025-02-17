@@ -6,14 +6,15 @@ package frc.robot.commands.ElevatorCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class L1ElevPos extends Command {
+public class GroundAlgaeElevPos extends Command {
 
   private ElevatorSubsystem elevatorSubsystem;
 
   /** Creates a new TestPIDCmda. */
-  public L1ElevPos(ElevatorSubsystem newElevatorSubsystem) {
+  public GroundAlgaeElevPos(ElevatorSubsystem newElevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     elevatorSubsystem = newElevatorSubsystem;
@@ -25,12 +26,13 @@ public class L1ElevPos extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
-    elevatorSubsystem.setSetpoint(0);
+    elevatorSubsystem.setSetpoint(10); //10 encoders for ground pickup
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -40,6 +42,6 @@ public class L1ElevPos extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atSetpoint();
+    return elevatorSubsystem.atSetpoint() || elevatorSubsystem.getBottomLimitSwitch();
   }
 }

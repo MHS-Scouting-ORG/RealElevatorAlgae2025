@@ -20,12 +20,12 @@ public class AlgaeTuckCmd extends Command {
   @Override
   public void initialize() {
     algaePivotSub.setSetpoint(-440);
+    algaePivotSub.enablePID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaePivotSub.enablePID();
   }
 
   // Called once the command ends or is interrupted.

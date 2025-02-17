@@ -84,8 +84,8 @@ public class Robot extends TimedRobot {
     elevInit.schedule();
     elevInit.cancel();
 
-    // disableAlgaePivotPID.schedule();
-    // disableAlgaePivotPID.cancel();
+    disableAlgaePivotPID.schedule();
+    disableAlgaePivotPID.cancel();
 
     // algaeInit.schedule();
     // algaeInit.cancel();

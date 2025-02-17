@@ -4,10 +4,14 @@
 
 package frc.robot.commands.IntegratedCmds;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlgaeIntakeCmds.IntakeCmd;
+import frc.robot.commands.AlgaePivotCmds.DealgifyL2PositionCmd;
 import frc.robot.commands.AlgaePivotCmds.ProcessorPositionCmd;
 import frc.robot.commands.ElevatorCmds.L2ElevPos;
+import frc.robot.commands.ElevatorCmds.L3ElevPos;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.commands.IntegratedCmds.TuckWithAlgae;
@@ -29,10 +33,13 @@ public class L2Dealgify extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new L2ElevPos(elevatorSubsystem),
-      new ProcessorPositionCmd(algaeIntakeSubsystem),
-      new IntakeCmd(algaeIntakeSubsystem),
-      new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
+      new L3ElevPos(elevatorSubsystem),
+      // new ParallelDeadlineGroup(
+      //   new IntakeCmd(newAlgaeIntakeSubsystem),
+      //   new DealgifyL2PositionCmd(newAlgaeIntakeSubsystem)
+      // )
+      new DealgifyL2PositionCmd(algaeIntakeSubsystem),
+      new IntakeCmd(algaeIntakeSubsystem)
     );
   }
 }

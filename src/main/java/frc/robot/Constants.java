@@ -42,10 +42,10 @@ public final class Constants {
     //0.000000000001
     //0.0003
     public static final double KP = 0.00055;
-    public static final double KI = 0.0002;//0.0005; //0.0004;
-    public static final double KD = 0.000025; //0.00005;
+    public static final double KI = 0.0007;//0.0005; //0.0004;
+    public static final double KD = 0.000002; //0.00005;
 
-    public static final double TOLERANCE = 30;
+    public static final double TOLERANCE = 40;
 
     //Pivot Max Speed
     public static final double MANUALPIVOTMAXSPEED = 1.0;

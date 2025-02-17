@@ -29,8 +29,7 @@ public class L3Dealgify extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new L3ElevPos(elevatorSubsystem),
-      new DealgifyL3PositionCmd(algaeIntakeSubsystem),
-      new TuckCmd(algaeIntakeSubsystem, elevatorSubsystem)
+      new DealgifyL3PositionCmd(algaeIntakeSubsystem)
     );
   }
 }

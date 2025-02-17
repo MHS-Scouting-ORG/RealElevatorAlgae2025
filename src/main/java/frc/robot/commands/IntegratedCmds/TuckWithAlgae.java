@@ -22,5 +22,6 @@ public class TuckWithAlgae extends SequentialCommandGroup {
     algaeIntakeSub = newAlgaeIntakeSub;
     elevatorSub = newElevatorSub;
     addCommands(new ElevProcessorPos(elevatorSub), new AlgaeTuckCmd(algaeIntakeSub));
+    addRequirements(algaeIntakeSub, elevatorSub);
   }
 }

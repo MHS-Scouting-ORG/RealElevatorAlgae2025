@@ -28,6 +28,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private double setpoint;
   private Timer steadyStateTimer;
 
+  private boolean isDone;
+
   private static final double steadyStateTimeout = 1.0; // seconds
 
   public AlgaeIntakeSubsystem() {
@@ -59,6 +61,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     steadyStateTimer = new Timer();
     steadyStateTimer.stop();
     steadyStateTimer.reset();
+    isDone = false;
   }
 
   // returns output of motor
@@ -123,6 +126,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   // turns the PID off
   public void disablePID() {
     PIDOn = false;
+    output = 0;
   }
 
   // resets the I value on overshoot
@@ -140,29 +144,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   // returns if the PID is finished (PID is at setpoint or not)
   public boolean isDone() {
-    // Check if we're at the setpoint
-    if (pivotPID.atSetpoint()) {
-      // Make sure the timer is running
-      if (!steadyStateTimer.isRunning()) {
-        steadyStateTimer.start();
-      }
-
-      // If the timer is greater than the steady state wait time, then
-      // it's been at the setpoint long enough
-      if (steadyStateTimer.get() >= steadyStateTimeout) {
-        return true;
-      }
-
-      // Otherwise we act as though it has not yet hit the set point
-      return false;
-    }
-
-    // We are not at the set point. Stop the timer and reset it.
-    steadyStateTimer.stop();
-    steadyStateTimer.reset();
-
-    // We're not at the set point so return false.
-    return false;
+    return isDone;
   }
 
   // sets the new setpoint for the PID
@@ -195,6 +177,10 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("[A] isFinished?", isDone());
     SmartDashboard.putData("[A] PID Controller", pivotPID);
 
+    SmartDashboard.putNumber("[A] Steady-State Timer", steadyStateTimer.get());
+    SmartDashboard.putBoolean("[A] isAtSetpoint", pivotPID.atSetpoint());
+    SmartDashboard.putNumber("[A] Setpoint", setpoint);
+
     // reset the algae pivot encoders if touching the limit switch
     if (getLSValue()) {
       resetEncoder();
@@ -217,12 +203,45 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     // KEANIS TESTING CODE
     if (isDone()) {
-      if (output > 0.2) {
-        output = 0.2;
-      } else if (output < -0.2) {
-        output = -0.2;
+      if (output > 0.15) {
+        output = 0.15;
+      } else if (output < -0.15) {
+        output = -0.15;
       }
     }
+
+    
+
+
+    // Check if we're at the setpoint
+    if (pivotPID.atSetpoint()) {
+      // Make sure the timer is running
+      if (!steadyStateTimer.isRunning()) {
+        steadyStateTimer.start();
+      }
+
+      // If the timer is greater than the steady state wait time, then
+      // it's been at the setpoint long enough
+      if (steadyStateTimer.get() >= steadyStateTimeout) {
+        isDone = true;
+      }
+      else{
+        isDone = false;
+      }
+    }
+    else{
+      // We are not at the set point. Stop the timer and reset it.
+      steadyStateTimer.stop();
+      steadyStateTimer.reset();
+
+      // We're not at the set point so return false.
+      isDone = false;
+    }
+
+
+
+
+
 
     // sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ElevatorCmds;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -12,10 +13,11 @@ public class L3ElevPos extends Command {
 
   private ElevatorSubsystem elevatorSubsystem;
 
+  private Timer timer;
   /** Creates a new TestPIDCmda. */
   public L3ElevPos(ElevatorSubsystem newElevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-
+    timer = new Timer();
     elevatorSubsystem = newElevatorSubsystem;
     addRequirements(elevatorSubsystem);
 
@@ -30,7 +32,11 @@ public class L3ElevPos extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (elevatorSubsystem.atSetpoint()){
+      timer.start();
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -40,6 +46,6 @@ public class L3ElevPos extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() >= 0.5;
   }
 }

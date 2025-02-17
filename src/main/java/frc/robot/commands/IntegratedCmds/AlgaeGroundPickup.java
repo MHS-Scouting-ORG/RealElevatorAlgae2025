@@ -10,6 +10,7 @@ import frc.robot.commands.AlgaePivotCmds.AlgaeTuckCmd;
 import frc.robot.commands.AlgaePivotCmds.ProcessorPositionCmd;
 import frc.robot.commands.ElevatorCmds.BottomElevPos;
 import frc.robot.commands.ElevatorCmds.ElevProcessorPos;
+import frc.robot.commands.ElevatorCmds.GroundAlgaeElevPos;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.commands.IntegratedCmds.TuckWithAlgae;
@@ -32,9 +33,8 @@ public class AlgaeGroundPickup extends SequentialCommandGroup {
     addCommands(
     new ElevProcessorPos(elevatorSubsystem),
     new ProcessorPositionCmd(algaeIntakeSubsystem), 
-    new BottomElevPos(elevatorSubsystem), 
-    new IntakeCmd(algaeIntakeSubsystem), 
-    new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem)
+    new GroundAlgaeElevPos(elevatorSubsystem), 
+    new IntakeCmd(algaeIntakeSubsystem)
     );
   }
 }
