@@ -21,20 +21,25 @@ public class NoAlgaeTuckCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaeIntakeSub.setSetpoint(10);
+    algaeIntakeSub.setSetpoint(1);
     algaeIntakeSub.enablePID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // algaeIntakeSub.setOutput(0.3);
+    // if(algaeIntakeSub.getLSValue()){
+    //   algaeIntakeSub.disablePID();
+    //   algaeIntakeSub.setOutput(0.1);
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeIntakeSub.disablePID();
-    algaeIntakeSub.setOutput(0.1);
+    // algaeIntakeSub.disablePID();
+    // algaeIntakeSub.setOutput(0.15);
   }
 
   // Returns true when the command should end.

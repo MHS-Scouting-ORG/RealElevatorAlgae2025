@@ -19,7 +19,8 @@ public class ProcessorPositionCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaeIntakeSub.setSetpoint(-1000);
+    // timer.reset();
+    algaeIntakeSub.setSetpoint(-1100); //-1350
     algaeIntakeSub.enablePID();
   }
 

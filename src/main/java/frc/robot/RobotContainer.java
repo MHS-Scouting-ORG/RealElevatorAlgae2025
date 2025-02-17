@@ -81,10 +81,14 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.exampleAuto();
+    return Autos.exampleAuto(algaeIntakeSubsystem);
   }
 
   public Command disableAlgaeIntakePID(){
     return disableAlgaeIntakePID;
+  }
+
+  public Command algaeInit(){
+    return algaeInit;
   }
 }
