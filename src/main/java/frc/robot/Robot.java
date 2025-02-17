@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
   private final Command disableAlgaePivotPID;
 
   private Command elevInit;
+  private Command algaeInit;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     elevInit = m_robotContainer.ElevInit();
+    algaeInit = m_robotContainer.AlgaeInit();
     disableAlgaePivotPID = m_robotContainer.disableAlgaeIntakePID();
   }
 
@@ -82,9 +84,11 @@ public class Robot extends TimedRobot {
     elevInit.schedule();
     elevInit.cancel();
 
+    // algaeInit.schedule();
+    // algaeInit.cancel();
 
-    disableAlgaePivotPID.schedule();
-    disableAlgaePivotPID.cancel();
+    // disableAlgaePivotPID.schedule();
+    // disableAlgaePivotPID.cancel();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

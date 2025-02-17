@@ -5,7 +5,7 @@ import frc.robot.commands.AlgaePivotCmds.NoAlgaeTuckCmd;
 import frc.robot.commands.ElevatorCmds.BottomElevPos;
 import frc.robot.commands.ElevatorCmds.ElevProcessorPos;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;   
 
 public class TuckCmd extends SequentialCommandGroup {
   AlgaeIntakeSubsystem algaeIntakeSub;
@@ -15,5 +15,6 @@ public class TuckCmd extends SequentialCommandGroup {
     algaeIntakeSub = newAlgaeIntakeSub;
     elevatorSub = newElevatorSub;
     addCommands(new ElevProcessorPos(elevatorSub), new NoAlgaeTuckCmd(algaeIntakeSub), new BottomElevPos(elevatorSub));
+    addRequirements(algaeIntakeSub, elevatorSub);
   }
 }
