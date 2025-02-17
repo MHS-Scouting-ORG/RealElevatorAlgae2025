@@ -18,6 +18,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
+  private Command elevInit;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    elevInit = m_robotContainer.ElevInit();
   }
 
   /**
@@ -46,7 +48,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -72,6 +75,10 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+    elevInit.schedule();
+    elevInit.cancel();
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

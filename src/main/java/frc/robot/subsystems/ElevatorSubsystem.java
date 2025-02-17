@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -11,15 +12,18 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  
+
   // Motors
   private TalonFX elevatorMotor;
+
+  private CurrentLimitsConfigs currentLimits;
 
   // Digital Inputs
   private DigitalInput topLimitSwitch;
@@ -38,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     elevatorMotor = new TalonFX(ElevatorConstants.LIFTID);
-    // topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
+    topLimitSwitch = new DigitalInput(ElevatorConstants.UPPERLSID);
     bottomLimitSwitch = new DigitalInput(ElevatorConstants.BOTTOMLSID);
     pid = new PIDController(ElevatorConstants.KP, ElevatorConstants.KI, ElevatorConstants.KD);
 
@@ -60,9 +64,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     manualOutput = speed;
   }
 
-  // public boolean getTopLimitSwitch() {
-  //   return topLimitSwitch.get();
-  // }
+  public boolean getTopLimitSwitch() {
+  return !topLimitSwitch.get();
+  }
 
   public boolean getBottomLimitSwitch() {
     return !bottomLimitSwitch.get();
@@ -80,11 +84,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     return pidOn;
   }
 
-  public double getEncoder(){
+  public double getEncoder() {
     return elevatorMotor.getPosition().getValueAsDouble();
   }
 
-  public void resetEncoder(){
+  public void resetEncoder() {
     elevatorMotor.setPosition(0);
   }
 
@@ -93,18 +97,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor.set(0);
   }
 
-  // deadzones manual inputs from -0.1 to 0.1 and caps the output at ElevatorConstants.MAXSPEED
+  // deadzones manual inputs from -0.1 to 0.1 and caps the output at
+  // ElevatorConstants.MAXSPEED
   private double deadzone(double input) {
     if (Math.abs(input) < 0.1) {
       return 0;
-    }
-    else if (input > ElevatorConstants.MAXSPEED) {
+    } else if (input > ElevatorConstants.MAXSPEED) {
       return ElevatorConstants.MAXSPEED;
-    }
-    else if (input < -ElevatorConstants.MAXSPEED) {
+    } else if (input < -ElevatorConstants.MAXSPEED) {
       return -ElevatorConstants.MAXSPEED;
-    }
-    else {
+    } else {
       return input;
     }
   }
@@ -117,11 +119,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   // resets the I value on overshoot
   private void resetI() {
     currentError = pid.getPositionError();
-
     if (currentError > 0 && previousError < 0) {
       pid.reset();
-    } 
-    else if (currentError < 0 && previousError > 0) {
+    } else if (currentError < 0 && previousError > 0) {
       pid.reset();
     }
 
@@ -136,7 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    if (getBottomLimitSwitch()){
+    if (getBottomLimitSwitch()) {
       resetEncoder();
     }
 
@@ -146,39 +146,28 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (pidOn) {
       output = pid.calculate(getEncoder(), setpoint);
 
-      // Turns pid off at setpoint
-      if (atSetpoint()){
-        output = 0;
-        turnPIDOff();
+      // Caps output at ElevatorConstants.MAXSPEED
+      if (output > ElevatorConstants.MAXSPEED) {
+        output = ElevatorConstants.MAXSPEED;
+      } else if (output < -ElevatorConstants.MAXSPEED) {
+        output = -ElevatorConstants.MAXSPEED;
       }
-      else{
-
-        // Caps output at ElevatorConstants.MAXSPEED
-        if (output > ElevatorConstants.MAXSPEED) {
-          output = ElevatorConstants.MAXSPEED;
-        }
-        else if (output < -ElevatorConstants.MAXSPEED) {
-          output = -ElevatorConstants.MAXSPEED;
-        }
-
-      }
-
     }
 
-    // If pid is off, runs manual control
+    // If pid is off, runs manual control (TESTING CODE ONLY)
     else{
-      output = deadzone(manualOutput);
+    output = deadzone(manualOutput);
     }
 
-    // Stops elevator if it hits a limit switch and is moving in the same direction
-    if (getBottomLimitSwitch() && output < 0){
-      stopElevator();
-      turnPIDOff();
+    // Stops elevator if it hits bottom limit switch and is moving in the same direction
+    if (getBottomLimitSwitch() && output < 0) {
+      output = 0;
+      setpoint = 0;
     }
-    // else if (getTopLimitSwitch() && output > 0){
-    //   stopElevator();
-    //   turnPIDOff();
-    // }
+    // Sets setpoint to current encoder value if elevator hits top limit switch
+    else if (getTopLimitSwitch() && output > 0){
+      setpoint = getEncoder();
+    }
 
     // Final call to set output
     elevatorMotor.set(output);
@@ -189,8 +178,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[E] Manual Output", manualOutput);
     SmartDashboard.putNumber("[E] Setpoint", setpoint);
     SmartDashboard.putBoolean("[E] isAtSetpoint", atSetpoint());
-    // SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
+    SmartDashboard.putBoolean("[E] Top LS", getTopLimitSwitch());
     SmartDashboard.putBoolean("[E] Bottom LS", getBottomLimitSwitch());
     SmartDashboard.putBoolean("[E] pidON", pidOn);
+    SmartDashboard.putData("[E] Elevator pid", pid);
+    
+    SmartDashboard.putNumber("[E] Stator Current", elevatorMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("[E] Supply Current", elevatorMotor.getSupplyCurrent().getValueAsDouble());
   }
 }
