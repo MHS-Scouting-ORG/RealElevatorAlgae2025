@@ -28,6 +28,8 @@ public class L3ElevPos extends Command {
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
     elevatorSubsystem.setSetpoint(78);
+    timer.stop();
+    timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,6 +48,6 @@ public class L3ElevPos extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() >= 0.5;
+    return timer.get() >= 0.;
   }
 }

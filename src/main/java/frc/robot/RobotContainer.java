@@ -78,9 +78,9 @@ public class RobotContainer {
     // new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TuckCmd(algaeIntakeSubsystem, elevatorSubsystem));
     new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem));
-    // new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2Dealgify(elevatorSubsystem, algaeIntakeSubsystem));
-    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new ProcessorScoring(algaeIntakeSubsystem, elevatorSubsystem));
-    // new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new AlgaeGroundPickup(elevatorSubsystem, algaeIntakeSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2Dealgify(elevatorSubsystem, algaeIntakeSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new ProcessorScoring(algaeIntakeSubsystem, elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new AlgaeGroundPickup(elevatorSubsystem, algaeIntakeSubsystem));
     // new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2ElevPos(elevatorSubsystem));
   }
 

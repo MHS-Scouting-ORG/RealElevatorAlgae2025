@@ -30,7 +30,7 @@ public final class Constants {
     public static final boolean CURRENTLIMIT = true;
 
     // Timeout for PID controller
-    public static final double TIMEOUT = 0.5;
+    public static final double TIMEOUT = 0.125;
 
     //Intake Max Speeds
     public static final double INTAKEMAXSPEED = 1.0;
