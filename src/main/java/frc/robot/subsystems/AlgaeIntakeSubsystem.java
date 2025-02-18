@@ -30,7 +30,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   private boolean isDone;
 
-  private static final double steadyStateTimeout = 1.0; // seconds
+  private static final double steadyStateTimeout = AlgaeIntakeConstants.TIMEOUT; // seconds
 
   public AlgaeIntakeSubsystem() {
     algaeIntake = new TalonSRX(AlgaeIntakeConstants.INTAKEID);

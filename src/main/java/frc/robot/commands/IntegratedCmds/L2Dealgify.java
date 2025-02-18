@@ -38,8 +38,8 @@ public class L2Dealgify extends SequentialCommandGroup {
       //   new IntakeCmd(newAlgaeIntakeSubsystem),
       //   new DealgifyL2PositionCmd(newAlgaeIntakeSubsystem)
       // )
-      new DealgifyL2PositionCmd(algaeIntakeSubsystem),
-      new IntakeCmd(algaeIntakeSubsystem)
+      new DealgifyL2PositionCmd(algaeIntakeSubsystem)
+      // new IntakeCmd(algaeIntakeSubsystem)
     );
   }
 }

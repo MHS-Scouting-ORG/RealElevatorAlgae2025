@@ -29,6 +29,9 @@ public final class Constants {
     //Current Limiting
     public static final boolean CURRENTLIMIT = true;
 
+    // Timeout for PID controller
+    public static final double TIMEOUT = 0.5;
+
     //Intake Max Speeds
     public static final double INTAKEMAXSPEED = 1.0;
     public static final double OUTTAKEMAXSPEED = 1.0;
@@ -65,7 +68,7 @@ public final class Constants {
     public static final double KI = 0.01;
     public static final double KD = 0.0;
 
-    public static final double TOLERANCE = 1; 
+    public static final double TOLERANCE = 5; 
 
     public static final double MAXSPEED = 0.8;
   }
