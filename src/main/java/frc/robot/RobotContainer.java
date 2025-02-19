@@ -32,7 +32,6 @@ import frc.robot.commands.IntegratedCmds.TuckCmd;
 import frc.robot.commands.IntegratedCmds.TuckWithAlgae;
 import frc.robot.commands.IntegratedCmds.AlgaeGroundPickup;
 import frc.robot.commands.IntegratedCmds.L2Dealgify;
-import frc.robot.commands.IntegratedCmds.L3Dealgify;
 import frc.robot.commands.IntegratedCmds.ProcessorScoring;
 
 public class RobotContainer {
@@ -78,10 +77,11 @@ public class RobotContainer {
     // new JoystickButton(xbox, XboxController.Button.kX.value).whileTrue(new OuttakeCmd(algaeIntakeSubsystem));
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TuckCmd(algaeIntakeSubsystem, elevatorSubsystem));
     new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2Dealgify(elevatorSubsystem, algaeIntakeSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new ProcessorScoring(algaeIntakeSubsystem, elevatorSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2Dealgify(elevatorSubsystem, algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new ProcessorScoring(algaeIntakeSubsystem, elevatorSubsystem));
     new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new AlgaeGroundPickup(elevatorSubsystem, algaeIntakeSubsystem));
-    // new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2ElevPos(elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L3ElevPos(elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new DealgifyL3PositionCmd(algaeIntakeSubsystem));
   }
 
   public Command ElevInit() {
