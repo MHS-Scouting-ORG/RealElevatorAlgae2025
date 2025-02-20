@@ -70,6 +70,8 @@ public final class Constants {
 
     public static final double TOLERANCE = 5; 
 
+    public static final double CURRENTLIMIT = 50;
+
     public static final double MAXSPEED = 0.8;
   }
 }

@@ -23,8 +23,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Motors
   private TalonFX elevatorMotor;
 
-  private CurrentLimitsConfigs currentLimits;
-
   // Digital Inputs
   private DigitalInput topLimitSwitch;
   private DigitalInput bottomLimitSwitch;
@@ -58,6 +56,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     pidOn = false;
 
     elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+    elevatorMotor.getConfigurator().apply(new CurrentLimitsConfigs().withStatorCurrentLimit(ElevatorConstants.CURRENTLIMIT));
   }
 
   public void setElevatorSpeed(double speed) {
