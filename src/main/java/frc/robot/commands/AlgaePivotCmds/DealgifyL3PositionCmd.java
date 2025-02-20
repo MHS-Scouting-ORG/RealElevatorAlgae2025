@@ -34,8 +34,8 @@ public class DealgifyL3PositionCmd extends Command {
   public void end(boolean interrupted) {
     algaeIntakeSub.setOutput(0.0);
     algaeIntakeSub.stopIntakeMotor();
-    algaeIntakeSub.setSetpoint(40);
-    algaeIntakeSub.enablePID();
+    // algaeIntakeSub.setSetpoint(40);
+    // algaeIntakeSub.enablePID();
   }
 
   // Returns true when the command should end.
