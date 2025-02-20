@@ -27,7 +27,7 @@ public class L3ElevPos extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.turnPIDOn();
-    elevatorSubsystem.setSetpoint(78);
+    elevatorSubsystem.setSetpoint(80);
     timer.stop();
     timer.reset();
   }
@@ -48,6 +48,6 @@ public class L3ElevPos extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() >= 0.;
+    return timer.get() >= 0.5;
   }
 }
