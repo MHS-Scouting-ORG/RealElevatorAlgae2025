@@ -22,6 +22,7 @@ public class NoAlgaeTuckCmd extends Command {
   @Override
   public void initialize() {
     algaeIntakeSub.setSetpoint(20);
+    algaeIntakeSub.enablePID();
     // algaeIntakeSub.disablePID();
     // algaeIntakeSub.setOutput(0.3);
     // algaeIntakeSub.setSetpoint(5);
