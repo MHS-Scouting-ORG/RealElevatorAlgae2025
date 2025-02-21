@@ -201,18 +201,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       }
     }
 
-    // KEANIS TESTING CODE
-    if (isDone()) {
-      if (output > 0.15) {
-        output = 0.15;
-      } else if (output < -0.15) {
-        output = -0.15;
-      }
-    }
-
-    
-
-
     // Check if we're at the setpoint
     if (pivotPID.atSetpoint()) {
       // Make sure the timer is running
