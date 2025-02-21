@@ -18,10 +18,10 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  // private final Command disableAlgaePivotPID;
+  private final Command disableAlgaePivotPID;
   // private final Command algaeInit;
 
-  // private Command elevInit;
+  private Command elevInit;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -30,9 +30,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    // elevInit = m_robotContainer.ElevInit();
+    elevInit = m_robotContainer.ElevInit();
     // algaeInit = m_robotContainer.algaeInit();
-    // disableAlgaePivotPID = m_robotContainer.disableAlgaeIntakePID();
+    disableAlgaePivotPID = m_robotContainer.disableAlgaeIntakePID();
   }
 
   /**
@@ -81,11 +81,11 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
 
-    // elevInit.schedule();
-    // elevInit.cancel();
+    elevInit.schedule();
+    elevInit.cancel();
 
-    // disableAlgaePivotPID.schedule();
-    // disableAlgaePivotPID.cancel();
+    disableAlgaePivotPID.schedule();
+    disableAlgaePivotPID.cancel();
 
     // algaeInit.schedule();
     // algaeInit.cancel();

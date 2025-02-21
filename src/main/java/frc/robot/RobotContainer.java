@@ -48,11 +48,11 @@ public class RobotContainer {
   
   public RobotContainer() {
 
-    elevInit.schedule();
-    disableAlgaeIntakePID.schedule();
+    // elevInit.schedule();
+    // disableAlgaeIntakePID.schedule();
 
-    algaeInit.cancel();
-    disableAlgaeIntakePID.cancel();
+    // algaeInit.cancel();
+    // disableAlgaeIntakePID.cancel();
  
     // elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
 
