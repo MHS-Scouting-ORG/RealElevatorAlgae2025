@@ -47,6 +47,12 @@ public class RobotContainer {
   public final Command disableAlgaeIntakePID = new InstantCommand(() -> algaeIntakeSubsystem.disablePID(), algaeIntakeSubsystem);
   
   public RobotContainer() {
+
+    elevInit.schedule();
+    disableAlgaeIntakePID.schedule();
+
+    algaeInit.cancel();
+    disableAlgaeIntakePID.cancel();
  
     // elevatorSubsystem.setDefaultCommand(new ManualElevatorCmd(elevatorSubsystem, () -> xbox.getLeftY()));
 
