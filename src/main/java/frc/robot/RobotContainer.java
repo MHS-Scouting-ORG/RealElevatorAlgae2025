@@ -45,6 +45,7 @@ public class RobotContainer {
   public final Command algaeInit = new NoAlgaeTuckCmd(algaeIntakeSubsystem);
 
   public final Command disableAlgaeIntakePID = new InstantCommand(() -> algaeIntakeSubsystem.disablePID(), algaeIntakeSubsystem);
+  // public final Command intakeZero = new InstantCommand(()-> algaeIntakeSubsystem.stopIntakeMotor(), algaeIntakeSubsystem);
   
   public RobotContainer() {
 
@@ -84,10 +85,10 @@ public class RobotContainer {
     new JoystickButton(xbox, XboxController.Button.kA.value).onTrue(new TuckCmd(algaeIntakeSubsystem, elevatorSubsystem));
     new JoystickButton(xbox, XboxController.Button.kB.value).onTrue(new TuckWithAlgae(algaeIntakeSubsystem, elevatorSubsystem));
     // new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L2Dealgify(elevatorSubsystem, algaeIntakeSubsystem));
-    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new ProcessorScoring(algaeIntakeSubsystem, elevatorSubsystem));
+    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new ProcessorScoring(algaeIntakeSubsystem, elevatorSubsystem));
     new JoystickButton(xbox, XboxController.Button.kRightBumper.value).onTrue(new AlgaeGroundPickup(elevatorSubsystem, algaeIntakeSubsystem));
     new JoystickButton(xbox, XboxController.Button.kX.value).onTrue(new L3ElevPos(elevatorSubsystem));
-    new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new DealgifyL3PositionCmd(algaeIntakeSubsystem));
+    // new JoystickButton(xbox, XboxController.Button.kY.value).onTrue(new DealgifyL3PositionCmd(algaeIntakeSubsystem));
   }
 
   public Command ElevInit() {
@@ -109,4 +110,8 @@ public class RobotContainer {
   public Command algaeInit(){
     return algaeInit;
   }
+
+  // public Command intakeZero(){
+  //   return intakeZero;
+  // }
 }

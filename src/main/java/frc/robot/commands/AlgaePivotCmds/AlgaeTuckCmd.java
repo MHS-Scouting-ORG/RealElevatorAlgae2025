@@ -9,18 +9,18 @@ import frc.robot.subsystems.AlgaeIntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeTuckCmd extends Command {
-  AlgaeIntakeSubsystem algaePivotSub;
+  AlgaeIntakeSubsystem algaeIntakeSub;
 
-  public AlgaeTuckCmd(AlgaeIntakeSubsystem newAlgaePivotSub) {
-    algaePivotSub = newAlgaePivotSub;
-    addRequirements(algaePivotSub);
+  public AlgaeTuckCmd(AlgaeIntakeSubsystem newAlgaeIntakeSub) {
+    algaeIntakeSub = newAlgaeIntakeSub;
+    addRequirements(algaeIntakeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaePivotSub.setSetpoint(-440);
-    algaePivotSub.enablePID();
+    algaeIntakeSub.setSetpoint(-440);
+    algaeIntakeSub.enablePID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,6 +36,6 @@ public class AlgaeTuckCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() { 
-    return algaePivotSub.isDone();
+    return algaeIntakeSub.isDone();
   }
 }

@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
   private final Command disableAlgaePivotPID;
-  private Command intakeZeroCommand;
+  // private Command intakeZeroCommand;
   // private final Command algaeInit;
 
   private Command elevInit;
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     elevInit = m_robotContainer.ElevInit();
     // algaeInit = m_robotContainer.algaeInit();
     disableAlgaePivotPID = m_robotContainer.disableAlgaeIntakePID();
-    intakeZeroCommand = m_robotContainer.intakeZero();
+    // intakeZeroCommand = m_robotContainer.intakeZero();
   }
 
   /**
@@ -89,8 +89,8 @@ public class Robot extends TimedRobot {
     disableAlgaePivotPID.schedule();
     disableAlgaePivotPID.cancel();
 
-    intakeZeroCommand.schedule();
-    intakeZeroCommand.cancel();
+    // intakeZeroCommand.schedule();
+    // intakeZeroCommand.cancel();
 
     // algaeInit.schedule();
     // algaeInit.cancel();

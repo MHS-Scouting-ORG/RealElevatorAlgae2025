@@ -34,6 +34,7 @@ public final class Constants {
 
     //Intake Max Speeds
     public static final double INTAKEMAXSPEED = 1.0;
+    public static final double INTAKEIDLESPEED = 0.4;
     public static final double OUTTAKEMAXSPEED = 1.0;
 
     public static final int PIVOTID = 18;
