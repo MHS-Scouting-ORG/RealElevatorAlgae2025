@@ -46,7 +46,7 @@ public class IntakeCmd extends Command {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putString("[A] END", "yes");
-    algaeIntakeSub.stopIntakeMotor();
+    algaeIntakeSub.runIntakeMotor(0.4);
     timer.stop();
   }
 

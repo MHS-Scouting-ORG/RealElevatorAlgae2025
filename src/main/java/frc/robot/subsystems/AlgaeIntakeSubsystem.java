@@ -226,11 +226,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       isDone = false;
     }
 
-
-
-
-
-
     // sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);
 
