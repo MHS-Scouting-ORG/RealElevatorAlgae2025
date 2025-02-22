@@ -229,6 +229,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     // sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);
 
+    if(setpoint == 20 && isDone){
+      stopIntakeMotor();
+    }
+    else{
+      runIntakeMotor(AlgaeIntakeConstants.INTAKEIDLESPEED);
+    }
+
     // prints the output of the pivot motor and if the limit switch is pressed or
     // not
     SmartDashboard.putNumber("[A] Pivot PID Output:", output);
