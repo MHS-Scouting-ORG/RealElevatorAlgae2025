@@ -73,7 +73,7 @@ public final class Constants {
 
     public static final double CURRENTLIMIT = 30;
 
-    public static final double MAXSPEED = 0.8;
+    public static final double MAXSPEED = 1.0; //0.8
   }
 }
 
