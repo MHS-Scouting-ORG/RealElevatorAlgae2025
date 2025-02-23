@@ -229,10 +229,12 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     // sets the output to the algae pivot motor controller
     algaePivot.set(TalonSRXControlMode.PercentOutput, output);
 
+    //if the algae pivot is tucked in, stop the intake motor
     if(setpoint == 20 && isDone){
       stopIntakeMotor();
     }
-    else{
+    //if the algae pivot is not tucked in, run the intake motor at idling speed
+    else{ 
       runIntakeMotor(AlgaeIntakeConstants.INTAKEIDLESPEED);
     }
 
